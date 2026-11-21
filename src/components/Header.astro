@@ -2,67 +2,192 @@
 import Sun from '@lucide/astro/icons/sun';
 import Moon from '@lucide/astro/icons/moon';
 import Menu from '@lucide/astro/icons/menu';
-import MessageCircle from '@lucide/astro/icons/message-circle';
+import X from '@lucide/astro/icons/x';
 import { nav, site, whatsappUrl } from '../data/site';
+
+interface Props {
+  /** Label of the nav item for the current page, e.g. "Work" on case studies. */
+  current?: string;
+}
+const { current } = Astro.props;
 ---
 
-<header class="sticky top-0 z-20 border-b border-border bg-bg/90 backdrop-blur">
-  <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-    <a href="/#top" class="font-semibold tracking-tight">{site.name}</a>
+<header id="top" class="site-header no-print">
+  <div class="wrap flex h-full items-center justify-between gap-4">
+    <a href="/" class="wordmark">{site.name}</a>
 
-    <nav aria-label="Main" class="hidden items-center gap-6 text-sm md:flex">
-      {nav.map((n) => <a href={n.href} class="text-muted hover:text-text">{n.label}</a>)}
+    <nav aria-label="Main" class="hidden items-center gap-7 md:flex">
+      {
+        nav.map((n) => (
+          <a href={n.href} class="nav-link" aria-current={n.label === current ? 'page' : undefined}>
+            {n.label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="flex items-center gap-2">
-      <a
-        href={whatsappUrl}
-        class="hidden items-center gap-2 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-fg sm:inline-flex"
-      >
-        <MessageCircle size={16} aria-hidden="true" />
-        WhatsApp me
-      </a>
-      <button
-        type="button"
-        id="theme-toggle"
-        class="rounded-md border border-border p-2 text-muted hover:text-text"
-        aria-label="Toggle dark mode"
-      >
-        <Sun size={16} class="hidden dark:block" aria-hidden="true" />
-        <Moon size={16} class="dark:hidden" aria-hidden="true" />
+      <a href={whatsappUrl} class="btn btn-outline btn-sm hidden min-[30rem]:inline-flex">WhatsApp</a>
+      <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Dark theme">
+        <Moon size={18} class="icon-moon" aria-hidden="true" />
+        <Sun size={18} class="icon-sun" aria-hidden="true" />
       </button>
-      <details class="relative md:hidden">
-        <summary
-          class="flex cursor-pointer list-none items-center rounded-md border border-border p-2 text-muted [&::-webkit-details-marker]:hidden"
-          aria-label="Open menu"
-        >
-          <Menu size={16} aria-hidden="true" />
-        </summary>
-        <nav
-          aria-label="Mobile"
-          class="absolute right-0 mt-2 w-48 rounded-md border border-border bg-surface p-2 text-sm shadow-sm"
-        >
-          {nav.map((n) => <a href={n.href} class="block rounded px-3 py-2 hover:bg-bg">{n.label}</a>)}
-          <a href={whatsappUrl} class="mt-1 block rounded bg-accent px-3 py-2 font-medium text-accent-fg">
-            WhatsApp me
-          </a>
-        </nav>
-      </details>
+      <button type="button" class="icon-btn menu-btn" popovertarget="mobile-nav" aria-label="Menu">
+        <Menu size={18} aria-hidden="true" />
+      </button>
     </div>
   </div>
+
+  <nav id="mobile-nav" popover aria-label="Mobile" class="mobile-nav">
+    <div class="wrap">
+      <div class="flex items-center justify-between py-3">
+        <span class="label">Menu</span>
+        <button type="button" class="icon-btn" popovertarget="mobile-nav" popovertargetaction="hide" aria-label="Close menu">
+          <X size={18} aria-hidden="true" />
+        </button>
+      </div>
+      <ul>
+        {
+          nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={n.label === current ? 'page' : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={whatsappUrl} class="btn btn-primary my-6 w-full">Message on WhatsApp</a>
+    </div>
+  </nav>
 </header>
 
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .wordmark {
+    font-family: var(--font-serif);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+  }
+  .nav-link:hover,
+  .nav-link[aria-current] {
+    color: var(--text);
+  }
+  .nav-link[aria-current] {
+    text-decoration-color: var(--accent);
+  }
+  .icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    color: var(--text);
+    transition: border-color 150ms ease;
+  }
+  .icon-btn:hover {
+    border-color: var(--text);
+  }
+  @media (pointer: coarse) {
+    .icon-btn {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+  @media (min-width: 48rem) {
+    .menu-btn {
+      display: none;
+    }
+  }
+  .icon-sun {
+    display: none;
+  }
+  :global([data-theme='dark']) .icon-sun {
+    display: block;
+  }
+  :global([data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .mobile-nav::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  .mobile-nav ul {
+    border-top: 1px solid var(--border);
+  }
+  .mobile-nav li a {
+    display: flex;
+    align-items: center;
+    min-height: 3.5rem;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+  }
+  .mobile-nav li a[aria-current] {
+    color: var(--accent);
+  }
+</style>
+
 <script>
-  const btn = document.getElementById('theme-toggle');
-  btn?.addEventListener('click', () => {
-    const root = document.documentElement;
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
+  const root = document.documentElement;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const sync = () => toggle?.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+  const apply = (theme: string) => {
+    root.dataset.theme = theme;
+    sync();
+  };
+  sync();
+
+  toggle?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    apply(next);
     try {
       localStorage.setItem('theme', next);
-    } catch (e) {}
+    } catch {}
   });
-  document.querySelectorAll('details nav a').forEach((a) =>
-    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
-  );
+
+  // Follow the system setting until the visitor picks a theme themselves.
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    let saved = null;
+    try {
+      saved = localStorage.getItem('theme');
+    } catch {}
+    if (!saved) apply(e.matches ? 'dark' : 'light');
+  });
+
+  // Close the mobile menu after jumping to a section on the same page.
+  const menu = document.getElementById('mobile-nav');
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => menu.hidePopover?.()));
 </script>

@@ -11,7 +11,9 @@ import { projects } from '../data/site';
   <div class="mt-8 grid gap-6 md:grid-cols-2">
     {projects.map((p) => (
       <article class="flex flex-col rounded-lg border border-border bg-surface p-6">
-        <h3 class="text-lg font-semibold">{p.title}</h3>
+        <h3 class="text-lg font-semibold">
+          <a href={`/work/${p.slug}`} class="hover:underline">{p.title}</a>
+        </h3>
         <p class="mt-2 text-muted">{p.summary}</p>
         <p class="mt-3 text-sm"><span class="font-medium">Result:</span> {p.result}</p>
         <ul class="mt-4 flex flex-wrap gap-2">
@@ -19,7 +21,8 @@ import { projects } from '../data/site';
             <li class="rounded border border-border px-2 py-0.5 text-xs text-muted">{t}</li>
           ))}
         </ul>
-        <div class="mt-6 flex gap-4 text-sm font-medium">
+        <div class="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
+          <a href={`/work/${p.slug}`} class="text-accent hover:underline">Read case study</a>
           <a href={p.live} class="inline-flex items-center gap-1 text-accent hover:underline">
             Open live site <ExternalLink size={14} aria-hidden="true" />
           </a>

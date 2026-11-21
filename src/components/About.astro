@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../assets/zaheeb.jpg';
+---
+
+<section id="about" class="mx-auto max-w-5xl scroll-mt-16 px-4 py-16">
+  <h2 class="text-2xl font-semibold tracking-tight">About</h2>
+  <div class="mt-8 grid items-start gap-8 md:grid-cols-[280px_1fr]">
+    <Image
+      src={photo}
+      alt="Portrait of Muhammad Zaheeb"
+      width={560}
+      height={700}
+      widths={[280, 560]}
+      sizes="(min-width: 768px) 280px, 100vw"
+      format="webp"
+      class="aspect-[4/5] w-full max-w-xs rounded-lg object-cover md:max-w-none"
+      style="object-position: 50% 55%"
+      loading="lazy"
+    />
+    <div class="max-w-prose space-y-4">
+      <p>
+        I'm Muhammad Zaheeb, a Computer Science student at FAST-NUCES who builds web products from start to
+        finish. I work with React and TypeScript on the front end and FastAPI and PostgreSQL on the back end.
+      </p>
+      <p>
+        My projects are live and open to inspect. NovaChat is a real-time chat app with authentication, media
+        and voice messages, backed by 94 automated tests and continuous integration. CampusFlow is a task
+        manager deployed as separate front-end and back-end apps.
+      </p>
+      <p>
+        I'm taking on small-business websites and web apps because I like building things people use every
+        day. You'll get plain-language updates, a fixed quote before work starts, and a live preview along the
+        way, so there are no surprises.
+      </p>
+      <p class="text-sm text-muted">BSCS, FAST-NUCES &nbsp;|&nbsp; English, Urdu</p>
+    </div>
+  </div>
+</section>

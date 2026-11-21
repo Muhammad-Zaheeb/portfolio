@@ -1,0 +1,68 @@
+---
+import Sun from '@lucide/astro/icons/sun';
+import Moon from '@lucide/astro/icons/moon';
+import Menu from '@lucide/astro/icons/menu';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import { nav, site, whatsappUrl } from '../data/site';
+---
+
+<header class="sticky top-0 z-20 border-b border-border bg-bg/90 backdrop-blur">
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+    <a href="#top" class="font-semibold tracking-tight">{site.name}</a>
+
+    <nav aria-label="Main" class="hidden items-center gap-6 text-sm md:flex">
+      {nav.map((n) => <a href={n.href} class="text-muted hover:text-text">{n.label}</a>)}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={whatsappUrl}
+        class="hidden items-center gap-2 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-fg sm:inline-flex"
+      >
+        <MessageCircle size={16} aria-hidden="true" />
+        WhatsApp me
+      </a>
+      <button
+        type="button"
+        id="theme-toggle"
+        class="rounded-md border border-border p-2 text-muted hover:text-text"
+        aria-label="Toggle dark mode"
+      >
+        <Sun size={16} class="hidden dark:block" aria-hidden="true" />
+        <Moon size={16} class="dark:hidden" aria-hidden="true" />
+      </button>
+      <details class="relative md:hidden">
+        <summary
+          class="flex cursor-pointer list-none items-center rounded-md border border-border p-2 text-muted [&::-webkit-details-marker]:hidden"
+          aria-label="Open menu"
+        >
+          <Menu size={16} aria-hidden="true" />
+        </summary>
+        <nav
+          aria-label="Mobile"
+          class="absolute right-0 mt-2 w-48 rounded-md border border-border bg-surface p-2 text-sm shadow-sm"
+        >
+          {nav.map((n) => <a href={n.href} class="block rounded px-3 py-2 hover:bg-bg">{n.label}</a>)}
+          <a href={whatsappUrl} class="mt-1 block rounded bg-accent px-3 py-2 font-medium text-accent-fg">
+            WhatsApp me
+          </a>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch (e) {}
+  });
+  document.querySelectorAll('details nav a').forEach((a) =>
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
+  );
+</script>

@@ -1,0 +1,29 @@
+---
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import { site, whatsappUrl } from '../data/site';
+---
+
+<section id="top" class="mx-auto max-w-5xl px-4 pb-16 pt-14 sm:pt-20">
+  <h1 class="max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+    {site.tagline}
+  </h1>
+  <p class="mt-5 max-w-xl text-lg text-muted">{site.support}</p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <a
+      href={whatsappUrl}
+      class="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-accent-fg"
+    >
+      <MessageCircle size={18} aria-hidden="true" />
+      Talk on WhatsApp
+    </a>
+    <a
+      href="#work"
+      class="inline-flex items-center gap-2 rounded-md border border-border px-5 py-3 font-medium hover:bg-surface"
+    >
+      See my work
+      <ArrowRight size={18} aria-hidden="true" />
+    </a>
+  </div>
+  <p class="mt-8 text-sm text-muted">Live apps &nbsp;|&nbsp; 90+ automated tests &nbsp;|&nbsp; Open source</p>
+</section>

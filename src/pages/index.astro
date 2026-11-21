@@ -1,20 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import MessageCircle from '@lucide/astro/icons/message-circle';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Work from '../components/Work.astro';
+import Services from '../components/Services.astro';
+import Process from '../components/Process.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
-  <main class="mx-auto max-w-2xl px-4 py-24">
-    <h1 class="text-3xl font-semibold tracking-tight">
-      I build fast, reliable websites and web apps for small businesses.
-    </h1>
-    <p class="mt-4 text-muted">Setup placeholder. Sections arrive in the next phase.</p>
-    <a
-      href="#"
-      class="mt-8 inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 font-medium text-accent-fg"
-    >
-      <MessageCircle size={18} aria-hidden="true" />
-      Talk on WhatsApp
-    </a>
+  <Header />
+  <main>
+    <Hero />
+    <Work />
+    <Services />
+    <Process />
+    <About />
+    <Contact />
   </main>
+  <Footer />
 </Layout>

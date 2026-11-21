@@ -1,16 +1,62 @@
 ---
+import SectionHead from './SectionHead.astro';
 import { process } from '../data/site';
 ---
 
-<section id="process" class="mx-auto max-w-5xl scroll-mt-16 px-4 py-16">
-  <h2 class="text-2xl font-semibold tracking-tight">How I work</h2>
-  <ol class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-    {process.map((s, i) => (
-      <li class="rounded-lg border border-border p-5">
-        <span class="text-sm font-medium text-accent">Step {i + 1}</span>
-        <h3 class="mt-1 font-semibold">{s.title}</h3>
-        <p class="mt-2 text-sm text-muted">{s.text}</p>
-      </li>
-    ))}
+<section id="process" class="section wrap" aria-labelledby="process-title">
+  <SectionHead id="process-title" num="03" label="Process" title="How a project runs" />
+
+  <ol class="steps">
+    {
+      process.map((s, i) => (
+        <li class="step grid-12 reveal avoid-break">
+          <span class="numeral num" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <h3 class="h3 title">{s.title}</h3>
+          <p class="text">{s.text}</p>
+        </li>
+      ))
+    }
   </ol>
 </section>
+
+<style>
+  .section {
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+  .steps {
+    margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    border-bottom: 1px solid var(--border);
+  }
+  .step {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    row-gap: 0.5rem;
+    align-items: baseline;
+    padding-block: clamp(1.25rem, 1rem + 1.25vw, 2rem);
+    border-top: 1px solid var(--border);
+  }
+  .num {
+    font-size: var(--step-2);
+  }
+  .text {
+    grid-column: 2;
+    max-width: 46ch;
+    color: var(--text-2);
+  }
+  @media (min-width: 48rem) {
+    .step {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .num {
+      grid-column: 1 / span 3;
+      font-size: var(--step-3);
+    }
+    .title {
+      grid-column: 4 / span 3;
+    }
+    .text {
+      grid-column: 7 / span 5;
+    }
+  }
+</style>

@@ -1,11 +1,43 @@
 ---
-import { site } from '../data/site';
+import { site, mailUrl } from '../data/site';
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-border">
-  <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-muted">
+<footer class="footer">
+  <div class="wrap inner small">
     <p>&copy; {year} {site.name}</p>
-    <p>Built by me with Astro</p>
+    <ul class="links no-print">
+      <li><a href={site.linkedin} class="link" rel="noopener">LinkedIn</a></li>
+      <li><a href={site.github} class="link" rel="noopener">GitHub</a></li>
+      <li><a href={mailUrl} class="link">Email</a></li>
+    </ul>
+    <p class="colophon">Built with Astro. Set in Newsreader and Inter.</p>
+    <a href="#top" class="link no-print">Back to top</a>
   </div>
 </footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem 2rem;
+    padding-block: 1.75rem 2.25rem;
+  }
+  .links {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .footer .link {
+    color: var(--text-2);
+  }
+  @media (min-width: 48rem) {
+    .colophon {
+      margin-left: auto;
+    }
+  }
+</style>

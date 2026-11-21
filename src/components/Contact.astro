@@ -1,32 +1,139 @@
 ---
 import MessageCircle from '@lucide/astro/icons/message-circle';
-import Mail from '@lucide/astro/icons/mail';
+import Copy from '@lucide/astro/icons/copy';
 import { site, whatsappUrl, mailUrl } from '../data/site';
+
+interface Props {
+  /** Shorter heading for the end of case study pages. */
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const headingId = compact ? 'contact-title-compact' : 'contact-title';
 ---
 
-<section id="contact" class="mx-auto max-w-5xl scroll-mt-16 px-4 py-16">
-  <h2 class="text-2xl font-semibold tracking-tight">Contact</h2>
-  <p class="mt-2 max-w-xl text-muted">The fastest way to reach me is WhatsApp. I usually reply the same day.</p>
-  <div class="mt-8 flex flex-wrap gap-3">
-    <a
-      href={whatsappUrl}
-      class="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-accent-fg"
-    >
-      <MessageCircle size={18} aria-hidden="true" />
-      WhatsApp {site.whatsappDisplay}
-    </a>
-    <a
-      href={mailUrl}
-      class="inline-flex items-center gap-2 rounded-md border border-border px-5 py-3 font-medium hover:bg-surface"
-    >
-      <Mail size={18} aria-hidden="true" />
-      {site.email}
-    </a>
+<section id={compact ? undefined : 'contact'} class="contact wrap" aria-labelledby={headingId}>
+  <div class="inner rule-strong">
+    <p class="label" aria-hidden="true">{compact ? 'Next step' : <><span class="tnum">05</span>&ensp;Contact</>}</p>
+    <h2 id={headingId} class="title">{compact ? 'Have a project in mind?' : 'Tell me about your project.'}</h2>
+
+    <div class="cols grid-12">
+      <div class="col-a">
+        <p class="text">WhatsApp is the fastest way to reach me. Email works too.</p>
+        <a href={whatsappUrl} class="btn btn-primary mt-6">
+          <MessageCircle size={18} aria-hidden="true" />
+          Message on WhatsApp
+        </a>
+        <p class="small mt-3 text-muted tnum">{site.whatsappDisplay}</p>
+      </div>
+
+      <div class="col-b">
+        <p class="label">Email</p>
+        <div class="email-row">
+          <a href={mailUrl} class="email link">{site.email}</a>
+          <button type="button" class="btn btn-outline btn-sm copy no-print" data-copy={site.email} aria-label="Copy email address">
+            <Copy size={15} aria-hidden="true" />
+            <span data-copy-label>Copy</span>
+          </button>
+        </div>
+        <p class="sr-only" aria-live="polite" data-copy-status></p>
+        {
+          !compact && (
+            <p class="small mt-6">
+              <a href={site.linkedin} class="link" rel="noopener">LinkedIn</a>
+              <span class="mx-3 text-muted" aria-hidden="true">/</span>
+              <a href={site.github} class="link" rel="noopener">GitHub</a>
+            </p>
+          )
+        }
+      </div>
+    </div>
+
+    {/* Contact form goes here once the Web3Forms key is available. */}
   </div>
-  <p class="mt-6 text-sm">
-    <a href={site.linkedin} class="text-accent hover:underline">LinkedIn</a>
-    &nbsp;|&nbsp;
-    <a href={site.github} class="text-accent hover:underline">GitHub</a>
-  </p>
-  <!-- Contact form is added in Phase 4 (needs a Web3Forms key) -->
 </section>
+
+<style>
+  .contact {
+    padding-block: clamp(4rem, 3rem + 5vw, 8rem) clamp(5rem, 3rem + 7vw, 9rem);
+  }
+  .inner {
+    padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  }
+  .title {
+    margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    font-size: var(--step-4);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    max-width: 14em;
+  }
+  .cols {
+    margin-top: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    row-gap: 3rem;
+  }
+  .text {
+    max-width: 34ch;
+    color: var(--text-2);
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+  .email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.75rem;
+  }
+  .email {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  @media (min-width: 48rem) {
+    .col-a {
+      grid-column: 1 / span 5;
+    }
+    .col-b {
+      grid-column: 7 / span 6;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.querySelector('[data-copy-label]');
+    const status = btn.closest('section')?.querySelector('[data-copy-status]');
+    let timer: number | undefined;
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      try {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          // Older or locked-down browsers: copy through a temporary selection.
+          const area = document.createElement('textarea');
+          area.value = text;
+          area.setAttribute('readonly', '');
+          area.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+          document.body.append(area);
+          area.select();
+          const ok = document.execCommand('copy');
+          area.remove();
+          btn.focus();
+          if (!ok) throw new Error('copy failed');
+        }
+        if (label) label.textContent = 'Copied';
+        if (status) status.textContent = 'Email address copied.';
+      } catch {
+        if (label) label.textContent = 'Copy failed';
+        if (status) status.textContent = 'Could not copy. Use the email link instead.';
+      }
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (label) label.textContent = 'Copy';
+        if (status) status.textContent = '';
+      }, 2000);
+    });
+  });
+</script>

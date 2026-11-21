@@ -1,39 +1,124 @@
 ---
 import { Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
 import photo from '../assets/zaheeb.jpg';
+import { site } from '../data/site';
 ---
 
-<section id="about" class="mx-auto max-w-5xl scroll-mt-16 px-4 py-16">
-  <h2 class="text-2xl font-semibold tracking-tight">About</h2>
-  <div class="mt-8 grid items-start gap-8 md:grid-cols-[280px_1fr]">
-    <Image
-      src={photo}
-      alt="Portrait of Muhammad Zaheeb"
-      width={560}
-      height={700}
-      widths={[280, 560]}
-      sizes="(min-width: 768px) 280px, 100vw"
-      format="webp"
-      class="aspect-[4/5] w-full max-w-xs rounded-lg object-cover md:max-w-none"
-      style="object-position: 50% 55%"
-      loading="lazy"
-    />
-    <div class="max-w-prose space-y-4">
-      <p>
-        I'm Muhammad Zaheeb, a Computer Science student at FAST-NUCES who builds web products from start to
-        finish. I work with React and TypeScript on the front end and FastAPI and PostgreSQL on the back end.
+<section id="about" class="section wrap" aria-labelledby="about-title">
+  <SectionHead id="about-title" num="04" label="About" title="The person you will be working with" />
+
+  <div class="body grid-12">
+    <figure class="portrait">
+      <div class="frame">
+        <Image
+          src={photo}
+          alt="Muhammad Zaheeb outdoors, with mountains behind him"
+          width={560}
+          height={700}
+          widths={[280, 480, 560]}
+          sizes="(min-width: 48rem) 28vw, 240px"
+          format="webp"
+          loading="lazy"
+          class="photo"
+        />
+      </div>
+      <figcaption class="small">{site.name}{site.city && `, ${site.city}`}</figcaption>
+    </figure>
+
+    <div class="text">
+      <p class="intro">
+        I'm Zaheeb, a computer science student at <span class="whitespace-nowrap">FAST-NUCES</span> who builds web products from start to finish.
       </p>
       <p>
-        My projects are live and open to inspect. NovaChat is a real-time chat app with authentication, media
-        and voice messages, backed by 94 automated tests and continuous integration. CampusFlow is a task
-        manager deployed as separate front-end and back-end apps.
+        On the front end I work with React and TypeScript; on the back end, FastAPI and PostgreSQL. NovaChat and
+        CampusFlow are both live and the code is public, so you can see how I work before you hire me.
       </p>
       <p>
-        I'm taking on small-business websites and web apps because I like building things people use every
-        day. You'll get plain-language updates, a fixed quote before work starts, and a live preview along the
-        way, so there are no surprises.
+        I'm taking on small-business websites and web apps because I like building things people use every day. You
+        get plain-language updates, a fixed quote before work starts and a live preview along the way.
       </p>
-      <p class="text-sm text-muted">BSCS, FAST-NUCES &nbsp;|&nbsp; English, Urdu</p>
+      <dl class="creds small">
+        <div><dt class="label">Education</dt><dd>{site.education}</dd></div>
+        <div><dt class="label">Languages</dt><dd>{site.languages}</dd></div>
+        <div>
+          <dt class="label">Elsewhere</dt>
+          <dd>
+            <a href={site.linkedin} class="link" rel="noopener">LinkedIn</a>&ensp;
+            <a href={site.github} class="link" rel="noopener">GitHub</a>
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </section>
+
+<style>
+  .section {
+    padding-block: clamp(5rem, 3rem + 7vw, 9rem);
+  }
+  .body {
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+    row-gap: 2.5rem;
+  }
+  .portrait {
+    margin: 0;
+    max-width: 15rem;
+  }
+  .portrait .frame {
+    padding: 0;
+  }
+  .photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
+  figcaption {
+    margin-top: 0.75rem;
+    color: var(--muted);
+  }
+  .text {
+    max-width: 62ch;
+  }
+  .text p + p {
+    margin-top: 1.1rem;
+  }
+  .text p:not(.intro) {
+    color: var(--text-2);
+  }
+  .intro {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.75rem;
+    text-wrap: balance;
+  }
+  .creds {
+    margin-top: 2.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .creds > div {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .creds dt {
+    padding-top: 0.15em;
+  }
+  @media (min-width: 48rem) {
+    .portrait {
+      grid-column: 1 / span 4;
+      max-width: none;
+    }
+    .text {
+      grid-column: 6 / span 7;
+      padding-top: clamp(1rem, 3vw, 3rem);
+    }
+  }
+</style>

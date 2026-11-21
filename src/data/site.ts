@@ -84,7 +84,7 @@ export const projects = [
 export const services = [
   {
     title: 'Business website',
-    price: 'from PKR 25,000 / $90',
+    price: 'from $100',
     time: '1-2 weeks',
     points: [
       'Up to 5 pages, mobile-first',
@@ -95,13 +95,13 @@ export const services = [
   },
   {
     title: 'Website with menu, booking or service info',
-    price: 'from PKR 40,000 / $150',
+    price: 'from $150',
     time: '2 weeks',
     points: ['Everything in Business website', 'Menu, price list or service pages', 'Booking or enquiry details'],
   },
   {
     title: 'Custom web app',
-    price: 'from PKR 100,000 / $350',
+    price: 'from $350',
     time: '3-6 weeks',
     points: ['Login and dashboard', 'Bookings and admin tools', 'Database and API'],
   },

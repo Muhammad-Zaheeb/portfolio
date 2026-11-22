@@ -1,43 +1,25 @@
-# Astro Starter Kit: Minimal
+# Portfolio
+
+Static portfolio site for Muhammad Zaheeb, built with Astro, Tailwind CSS and TypeScript.
+
+## Commands
+
+| Command           | Action                                      |
+| :---------------- | :------------------------------------------ |
+| `npm install`     | Install dependencies                        |
+| `npm run dev`     | Start the dev server at `localhost:4321`    |
+| `npm run build`   | Build the production site to `./dist/`      |
+| `npm run preview` | Preview the production build locally        |
+
+## Deploying: set `SITE_URL`
+
+Set the `SITE_URL` environment variable to the production origin when you build, for example:
 
 ```sh
-npm create astro@latest -- --template minimal
+SITE_URL=https://example.com npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+It is used for canonical links, `og:url`, absolute Open Graph image URLs, the sitemap, and the
+`Sitemap:` line in `robots.txt`. If it is unset the site still builds, but all of those are left out
+and the build prints a warning. Set it in your host's project environment settings so production
+builds always have it.

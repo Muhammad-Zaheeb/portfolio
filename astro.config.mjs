@@ -7,6 +7,15 @@ import tailwindcss from '@tailwindcss/vite';
 // Canonical links, absolute Open Graph URLs and the sitemap are only emitted when it is set.
 const site = process.env.SITE_URL || undefined;
 
+// Warn loudly on production builds: without SITE_URL the deployed site has no canonical links,
+// no sitemap and relative Open Graph image URLs, which social platforms cannot resolve.
+if (!site && process.argv.includes('build')) {
+  const bar = '='.repeat(72);
+  console.warn(
+    `\n${bar}\nWARNING: SITE_URL is not set.\nThis build will have NO sitemap, NO canonical or og:url tags, relative og:image\nURLs, and a robots.txt without a Sitemap line.\nSet it before deploying, e.g. SITE_URL=https://example.com npm run build\n${bar}\n`,
+  );
+}
+
 // https://astro.build/config
 export default defineConfig({
   site,

@@ -1,7 +1,7 @@
 ---
 import MessageCircle from '@lucide/astro/icons/message-circle';
 import Copy from '@lucide/astro/icons/copy';
-import { site, whatsappUrl, mailUrl } from '../data/site';
+import { site, whatsappUrl, mailUrl, web3formsKey, web3formsEndpoint, budgets } from '../data/site';
 
 interface Props {
   /** Shorter heading for the end of case study pages. */
@@ -48,7 +48,48 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
       </div>
     </div>
 
-    {/* Contact form goes here once the Web3Forms key is available. */}
+    <form class="form" action={web3formsEndpoint} method="POST" data-enquiry>
+      <h3 class="form-title">Or send an enquiry</h3>
+      <p class="small form-note">Tell me a little about what you need. I will reply by email or WhatsApp.</p>
+
+      <input type="hidden" name="access_key" value={web3formsKey} />
+      <input type="hidden" name="subject" value="New enquiry from the portfolio site" />
+      <input type="hidden" name="from_name" value="Portfolio contact form" />
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+
+      <div class="fields">
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" />
+          <p id="f-name-err" class="err small" data-err></p>
+        </div>
+        <div class="field">
+          <label for="f-email">Your email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" />
+          <p id="f-email-err" class="err small" data-err></p>
+        </div>
+        <div class="field wide">
+          <label for="f-budget">Budget <span class="opt">(optional, in USD)</span></label>
+          <select id="f-budget" name="budget" autocomplete="off">
+            <option value="">Choose a range</option>
+            {budgets.map((b) => <option value={b}>{b}</option>)}
+          </select>
+        </div>
+        <div class="field wide">
+          <label for="f-message">Your message</label>
+          <textarea id="f-message" name="message" rows="6" minlength="20" required aria-describedby="f-message-err"></textarea>
+          <p id="f-message-err" class="err small" data-err></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary" data-submit>Send enquiry</button>
+      </div>
+      <div class="status" role="status" aria-live="polite" data-status tabindex="-1"></div>
+      <template data-fallback>
+        <a href={whatsappUrl} class="link">WhatsApp</a> or <a href={mailUrl} class="link">{site.email}</a>
+      </template>
+    </form>
   </div>
 </section>
 
@@ -89,6 +130,125 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
     line-height: 1.2;
     letter-spacing: -0.01em;
     overflow-wrap: anywhere;
+  }
+  .form {
+    margin-top: clamp(3rem, 2rem + 4vw, 5.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    max-width: 44rem;
+  }
+  .form-title {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  .form-note {
+    margin-top: 0.5rem;
+    color: var(--text-2);
+  }
+  .fields {
+    display: grid;
+    gap: 1.5rem 1.25rem;
+    margin-top: 2rem;
+  }
+  .field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: var(--step--1);
+    font-weight: 550;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+  .opt {
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    display: block;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    font: inherit;
+    font-size: var(--step-0);
+    line-height: 1.4;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  .field select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 1.2rem) 50%, calc(100% - 0.85rem) 50%;
+    background-size: 0.35rem 0.35rem;
+    background-repeat: no-repeat;
+  }
+  .field input:hover,
+  .field select:hover,
+  .field textarea:hover {
+    border-color: var(--text);
+  }
+  .field input:focus-visible,
+  .field select:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .field [aria-invalid='true'] {
+    border-color: var(--accent);
+    border-width: 2px;
+    padding: calc(0.7rem - 1px) calc(0.85rem - 1px);
+  }
+  .err {
+    margin-top: 0.4rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .err:empty {
+    display: none;
+  }
+  .actions {
+    margin-top: 2rem;
+  }
+  .actions .btn[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .status:empty {
+    display: none;
+  }
+  .status {
+    margin-top: 1.25rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .status:focus {
+    outline: none;
+  }
+  @media (min-width: 40rem) {
+    .fields {
+      grid-template-columns: 1fr 1fr;
+    }
+    .field.wide {
+      grid-column: 1 / -1;
+    }
+  }
+  @media print {
+    .form {
+      display: none;
+    }
   }
   @media (min-width: 48rem) {
     .col-a {
@@ -136,4 +296,73 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
       }, 2000);
     });
   });
+</script>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('form[data-enquiry]');
+  if (form) {
+    form.noValidate = true;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const fallback = form.querySelector<HTMLTemplateElement>('[data-fallback]')!;
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[required], textarea[required]')];
+
+    const messageFor = (el: HTMLInputElement | HTMLTextAreaElement): string => {
+      const v = el.validity;
+      if (v.valid) return '';
+      if (el.name === 'name') return 'Please enter your name.';
+      if (el.name === 'email') return v.valueMissing ? 'Please enter your email address.' : 'Please enter a valid email address, like name@example.com.';
+      if (v.valueMissing) return 'Please write a short message.';
+      return `Please write at least ${el.minLength} characters so I know what you need.`;
+    };
+    const check = (el: HTMLInputElement | HTMLTextAreaElement): boolean => {
+      if (el.name === 'message') el.value.trim().length < el.minLength && el.setCustomValidity('short');
+      const msg = messageFor(el);
+      el.setCustomValidity('');
+      const err = form.querySelector<HTMLElement>('#' + el.id + '-err')!;
+      err.textContent = msg;
+      if (msg) el.setAttribute('aria-invalid', 'true');
+      else el.removeAttribute('aria-invalid');
+      return !msg;
+    };
+    fields.forEach((el) => {
+      el.addEventListener('blur', () => { if (el.value) check(el); });
+      el.addEventListener('input', () => { if (el.getAttribute('aria-invalid')) check(el); });
+    });
+
+    const show = (text: string, withFallback = false) => {
+      status.replaceChildren(text);
+      if (withFallback) status.append(' ', ...fallback.content.cloneNode(true).childNodes, '.');
+    };
+
+    form.addEventListener('submit', async (event) => {
+      const results = fields.map(check);
+      const firstBad = fields[results.indexOf(false)];
+      event.preventDefault();
+      if (firstBad) {
+        show('Please fix the highlighted fields and send again.');
+        firstBad.focus();
+        return;
+      }
+      button.disabled = true;
+      button.textContent = 'Sending...';
+      show('Sending your enquiry...');
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error('rejected');
+        form.reset();
+        show('Thank you. Your message has been sent. I will reply by email or WhatsApp.');
+        button.textContent = 'Sent';
+      } catch {
+        show('Sorry, that did not send. Your message is still in the form. You can try again, or reach me on', true);
+        button.disabled = false;
+        button.textContent = 'Send enquiry';
+      }
+    });
+  }
 </script>

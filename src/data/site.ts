@@ -19,6 +19,12 @@ export const site = {
   city: '', // e.g. 'Lahore, Pakistan'
 };
 
+// Web3Forms public access key. It is meant to be public and only routes enquiries to the owner's inbox.
+export const web3formsKey = '54d2974d-df53-43a2-97c8-4274748feb14';
+export const web3formsEndpoint = 'https://api.web3forms.com/submit';
+
+export const budgets = ['Under $250', '$250 to $500', '$500 to $1,000', 'Over $1,000', 'Not sure yet'];
+
 export const whatsappUrl = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(site.whatsappMessage)}`;
 export const mailUrl = `mailto:${site.email}`;
 

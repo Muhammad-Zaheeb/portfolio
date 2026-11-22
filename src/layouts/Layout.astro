@@ -70,7 +70,7 @@ const ogImage = abs(`/og/${og}.png`);
       })();
     </script>
 
-    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />)}
   </head>
   <body class="min-h-screen">
     <a

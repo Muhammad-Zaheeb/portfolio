@@ -33,6 +33,7 @@ const sections = [
   description={p.seoDescription}
   og={p.slug}
   ogType="article"
+  ogAlt={`Case study card: ${p.title}. ${p.summary}`}
   jsonLd={[projectLd(p, Astro.site)]}
 >
   <Header current="Work" />

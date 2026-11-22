@@ -10,12 +10,14 @@ interface Props {
   /** Slug of the generated Open Graph image in /og/, e.g. "home" or a project slug. */
   og?: string;
   ogType?: 'website' | 'article';
+  /** Alt text for the Open Graph image, which is a text card. Describes the card, not the page title. */
+  ogAlt?: string;
   jsonLd?: Record<string, unknown>[];
   /** Keep the page out of search results and skip canonical and og:url (used by the 404 page). */
   noindex?: boolean;
 }
 
-const { title = site.title, description = site.description, og = 'home', ogType = 'website', jsonLd = [], noindex = false } =
+const { title = site.title, description = site.description, og = 'home', ogType = 'website', ogAlt = 'Muhammad Zaheeb. I build websites and web apps for small businesses. Fixed written quotes. Prices in USD, from $100.', jsonLd = [], noindex = false } =
   Astro.props;
 
 // Absolute URLs need the production domain (SITE_URL). Without it, fall back to root-relative paths.
@@ -48,7 +50,7 @@ const ogImage = abs(`/og/${og}.png`);
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href="/favicon.ico" sizes="32x32" />

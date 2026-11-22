@@ -38,11 +38,11 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
         <p class="sr-only" aria-live="polite" data-copy-status></p>
         {
           !compact && (
-            <p class="small mt-6">
+            <div class="small mt-6">
               <a href={site.linkedin} class="link" rel="noopener">LinkedIn</a>
               <span class="mx-3 text-muted" aria-hidden="true">/</span>
               <a href={site.github} class="link" rel="noopener">GitHub</a>
-            </p>
+            </div>
           )
         }
       </div>

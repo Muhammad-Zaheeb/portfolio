@@ -261,6 +261,16 @@
     text-decoration-color: currentColor;
   }
 
+  /* Touch: standalone links get a 44px tall target. Links inside paragraphs keep inline layout. */
+  @media (pointer: coarse) {
+    .link:not(p .link),
+    .link-quiet {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+    }
+  }
+
   /* Buttons */
   .btn {
     display: inline-flex;
@@ -294,6 +304,11 @@
     min-height: 2.5rem;
     padding: 0.5rem 0.9rem;
     font-size: var(--step--1);
+  }
+  @media (pointer: coarse) {
+    .btn-sm {
+      min-height: 2.75rem;
+    }
   }
 
   /* Hairline-framed image on a paper matte */

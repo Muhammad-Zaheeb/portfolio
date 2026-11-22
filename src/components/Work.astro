@@ -133,6 +133,11 @@ const images = { novachat, campusflow } as const;
     font-size: var(--step-0);
     flex-basis: 100%;
   }
+  @media (pointer: coarse) {
+    .row-links {
+      row-gap: 0;
+    }
+  }
   .footnote {
     color: var(--muted);
     padding-top: 1.25rem;

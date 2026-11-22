@@ -58,7 +58,7 @@ export const projects = [
       ['Front end', 'React, TypeScript, Vite, Tailwind CSS'],
       ['Back end', 'FastAPI, SQLAlchemy (async), Alembic, PostgreSQL'],
       ['Real-time', 'WebSockets'],
-      ['Quality', 'pytest, ESLint, GitHub Actions CI'],
+      ['Quality', 'pytest, oxlint, GitHub Actions CI'],
       ['Hosting', 'Docker on Render, Neon Postgres, all on free tiers'],
     ],
     outcome:

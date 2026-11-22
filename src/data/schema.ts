@@ -51,7 +51,7 @@ export function projectLd(p: Project, base?: URL) {
     '@type': 'CreativeWork',
     name: p.title,
     description: p.summary,
-    url: at(base, `/work/${p.slug}`),
+    url: at(base, `/work/${p.slug}/`),
     author: { '@type': 'Person', name: site.name, url: at(base, '/') },
     sameAs: [p.live, ...p.repos.map((r) => r.href)],
     keywords: p.stackShort,

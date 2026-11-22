@@ -61,6 +61,15 @@ const ogImage = abs(`/og/${og}.png`);
     <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
 
+    <noscript>
+      <style>
+        [data-theme-toggle],
+        [data-copy] {
+          display: none !important;
+        }
+      </style>
+    </noscript>
+
     <script is:inline>
       (function () {
         var saved = null;

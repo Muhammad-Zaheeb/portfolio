@@ -46,9 +46,13 @@ const images = { novachat, campusflow } as const;
               </div>
             </dl>
             <div class="row-links">
-              <a href={`/work/${p.slug}`} class="link-quiet inline-flex items-center gap-1.5 font-medium">
+              <a
+                href={`/work/${p.slug}`}
+                class="link-quiet inline-flex items-center gap-1.5 font-medium"
+                aria-hidden="true"
+                tabindex="-1"
+              >
                 Read the case study <ArrowRight size={16} aria-hidden="true" />
-                <span class="sr-only">: {p.title}</span>
               </a>
               <a href={p.live} class="link inline-flex items-center gap-1" rel="noopener">
                 Live site<span class="sr-only"> for {p.title}</span> <ArrowUpRight size={15} aria-hidden="true" />

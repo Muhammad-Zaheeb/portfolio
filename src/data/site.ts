@@ -13,6 +13,7 @@ export const site = {
   github: 'https://github.com/Muhammad-Zaheeb',
   education: 'BSCS, FAST-NUCES',
   languages: 'English, Urdu',
+  programming: 'TypeScript, Python, C++',
 
   // Owner to confirm. Anything left empty is not rendered anywhere on the site.
   availability: '', // e.g. 'Taking new projects'
@@ -42,7 +43,7 @@ export const projects = [
     title: 'NovaChat',
     summary: 'A real-time chat app with friend requests, group chats, photos, files and voice messages.',
     type: 'Personal project',
-    stackShort: 'React, TypeScript, FastAPI, PostgreSQL, WebSockets',
+    stackShort: 'React, TypeScript, Python, FastAPI, PostgreSQL, WebSockets',
     proof: '94 backend tests, GitHub Actions CI, deployed on Render',
     live: 'https://novachat-v022.onrender.com',
     github: 'https://github.com/Muhammad-Zaheeb/NovaChat',
@@ -56,7 +57,7 @@ export const projects = [
       'A React and TypeScript front end talks to a FastAPI back end over REST and WebSockets. Friend requests control who can start a chat or join a group. Accounts use email verification, rate-limited sign-in and cookie-based sessions. Chats support photos, files and voice messages.',
     stack: [
       ['Front end', 'React, TypeScript, Vite, Tailwind CSS'],
-      ['Back end', 'FastAPI, SQLAlchemy (async), Alembic, PostgreSQL'],
+      ['Back end', 'Python, FastAPI, SQLAlchemy (async), Alembic, PostgreSQL'],
       ['Real-time', 'WebSockets'],
       ['Quality', 'pytest, oxlint, GitHub Actions CI'],
       ['Hosting', 'Docker on Render, Neon Postgres, all on free tiers'],
@@ -69,7 +70,7 @@ export const projects = [
     title: 'CampusFlow',
     summary: 'A task manager for students that shows what is due today, what is overdue and what is done.',
     type: 'Personal project',
-    stackShort: 'React, TypeScript, FastAPI, PostgreSQL',
+    stackShort: 'React, TypeScript, Python, FastAPI, PostgreSQL',
     proof: '30 backend tests, CI on both repos, public API docs',
     live: 'https://campusflow-frontend-blond.vercel.app',
     github: 'https://github.com/Muhammad-Zaheeb/campusflow-frontend',
@@ -87,7 +88,7 @@ export const projects = [
       "A React front end with a dashboard, search, filters and sorting by due date or priority. A separate FastAPI back end handles accounts with JWT sign-in and keeps each user's tasks private to them.",
     stack: [
       ['Front end', 'React, TypeScript, Vite, Tailwind CSS'],
-      ['Back end', 'FastAPI, SQLAlchemy, Pydantic'],
+      ['Back end', 'Python, FastAPI, SQLAlchemy, Pydantic'],
       ['Database', 'PostgreSQL on Neon'],
       ['Quality', '30 backend tests with pytest, CI on both repos'],
       ['Hosting', 'Vercel (front end), Render (back end)'],

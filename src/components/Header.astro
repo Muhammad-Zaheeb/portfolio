@@ -19,7 +19,7 @@ const { current } = Astro.props;
     <nav aria-label="Main" class="hidden items-center gap-7 md:flex">
       {
         nav.map((n) => (
-          <a href={n.href} class="nav-link" aria-current={n.label === current ? 'page' : undefined}>
+          <a href={n.href} class="nav-link" aria-current={n.label === current ? 'true' : undefined}>
             {n.label}
           </a>
         ))
@@ -50,7 +50,7 @@ const { current } = Astro.props;
         {
           nav.map((n) => (
             <li>
-              <a href={n.href} aria-current={n.label === current ? 'page' : undefined}>
+              <a href={n.href} aria-current={n.label === current ? 'true' : undefined}>
                 {n.label}
               </a>
             </li>

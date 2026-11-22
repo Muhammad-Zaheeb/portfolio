@@ -383,6 +383,8 @@
     --muted: #444;
     --border: #bbb;
     --accent: #000;
+    --accent-hover: #000;
+    --accent-fg: #fff;
     color-scheme: light;
   }
   html,
@@ -394,11 +396,16 @@
   [popover] {
     display: none !important;
   }
-  a[href^="http"]:not(.no-print-url)::after {
+  a[href^="http"]:not([href*="wa.me"]):not(.no-print-url)::after {
     content: " (" attr(href) ")";
     font-size: 0.85em;
     color: #444;
     word-break: break-all;
+  }
+  a[href*="wa.me"]::after {
+    content: " (WhatsApp +92 302 4010502)";
+    font-size: 0.85em;
+    color: #444;
   }
   .reveal {
     animation: none !important;

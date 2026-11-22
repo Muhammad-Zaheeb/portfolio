@@ -227,6 +227,15 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Long words and URLs wrap instead of overflowing when text is enlarged */
+  dd,
+  dt,
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+  }
+
   /* Links */
   .link {
     color: var(--text);

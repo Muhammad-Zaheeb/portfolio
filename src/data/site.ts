@@ -37,12 +37,17 @@ export const nav = [
   { label: 'Contact', href: '/#contact' },
 ];
 
+/** Gali Nau live address. Fill this in after the Vercel deploy; while empty, no "Live site" link is shown anywhere. */
+export const GALI_NAU_LIVE_URL = '';
+
 export const projects = [
   {
     slug: 'novachat',
     title: 'NovaChat',
     summary: 'A real-time chat app with friend requests, group chats, photos, files and voice messages.',
     type: 'Personal project',
+    fictional: false,
+    freeHosted: true,
     stackShort: 'React, TypeScript, Python, FastAPI, PostgreSQL, WebSockets',
     proof: '94 backend tests, GitHub Actions CI, deployed on Render',
     live: 'https://novachat-v022.onrender.com',
@@ -70,6 +75,8 @@ export const projects = [
     title: 'CampusFlow',
     summary: 'A task manager for students that shows what is due today, what is overdue and what is done.',
     type: 'Personal project',
+    fictional: false,
+    freeHosted: true,
     stackShort: 'React, TypeScript, Python, FastAPI, PostgreSQL',
     proof: '30 backend tests, CI on both repos, public API docs',
     live: 'https://campusflow-frontend-blond.vercel.app',
@@ -95,6 +102,38 @@ export const projects = [
     ],
     outcome:
       'Two separately deployed apps that work together, with interactive API docs and 30 automated backend tests.',
+  },
+  {
+    slug: 'gali-nau',
+    title: 'Gali Nau (concept demo)',
+    summary:
+      'A sample website for a neighbourhood cafe: menu, opening hours with an open-now sign, directions and ordering on WhatsApp.',
+    type: 'Concept demo, fictional cafe',
+    fictional: true,
+    freeHosted: false,
+    notice: 'Concept demo of a fictional cafe. Not a client project.',
+    stackShort: 'Astro, Tailwind CSS, TypeScript',
+    proof: 'Lighthouse 100 for speed, accessibility and best practices',
+    live: GALI_NAU_LIVE_URL,
+    github: 'https://github.com/Muhammad-Zaheeb/cafe-demo',
+    repos: [{ label: 'Source on GitHub', href: 'https://github.com/Muhammad-Zaheeb/cafe-demo' }],
+    seoDescription:
+      'Concept demo: Gali Nau, a sample website for a fictional neighbourhood cafe, built with Astro and Tailwind CSS. Not a client project.',
+    imageAlt:
+      'Gali Nau concept demo home page in dark mode: the headline "Chai, coffee and breakfast, on Lane Nine." beside a card of opening hours.',
+    problem:
+      'Most small cafes need the same few things online: a menu people can read on a phone, opening hours that are right today, a way to find the place and a quick way to order. I wanted to show what that looks like, so a cafe owner can judge it before talking to me.',
+    solution:
+      'A single page for an invented cafe. The menu has a sticky category bar. An open-now sign and today\'s row in the hours are worked out from the hours table, including a prayer break on Friday. Directions open in the visitor\'s own maps app, and an order button opens WhatsApp with a message already typed. The menu, hours, address and colours each live in one file, so changing them does not touch the page code.',
+    stack: [
+      ['Framework', 'Astro (static output), TypeScript'],
+      ['Styling', 'Tailwind CSS, self-hosted Fraunces and Instrument Sans fonts'],
+      ['Script', 'One small inline script, no libraries. The page works without it.'],
+      ['Look', 'No photos or logos; type, CSS and one original street-sign mark'],
+      ['Sharing', 'Social preview image drawn at build time'],
+    ],
+    outcome:
+      'A demo, not a client result. Lighthouse scores 100 for performance, accessibility and best practices on mobile and desktop. The whole thing is a fictional business: the name, menu, prices and address are all made up, and the page says so. It is kept out of search results on purpose.',
   },
 ];
 

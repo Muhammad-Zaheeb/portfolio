@@ -23,7 +23,7 @@ const pages: Record<string, { eyebrow: string; title: string; detail: string }> 
     detail: 'Fixed written quotes. Prices in USD, from $100.',
   },
   ...Object.fromEntries(
-    projects.map((p) => [p.slug, { eyebrow: 'Case study', title: p.title, detail: p.summary }]),
+    projects.map((p) => [p.slug, { eyebrow: p.fictional ? 'Concept demo' : 'Case study', title: p.title, detail: p.summary }]),
   ),
 };
 

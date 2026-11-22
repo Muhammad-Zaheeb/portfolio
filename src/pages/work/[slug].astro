@@ -11,6 +11,7 @@ import { projects } from '../../data/site';
 import { projectLd } from '../../data/schema';
 import novachat from '../../assets/novachat.jpg';
 import campusflow from '../../assets/campusflow.jpg';
+import galiNau from '../../assets/gali-nau.jpg';
 
 export function getStaticPaths() {
   return projects.map((p, i) => ({
@@ -20,7 +21,7 @@ export function getStaticPaths() {
 }
 
 const { p, next } = Astro.props;
-const images = { novachat, campusflow } as const;
+const images = { novachat, campusflow, 'gali-nau': galiNau } as const;
 const image = images[p.slug as keyof typeof images];
 const sections = [
   { heading: 'Problem', text: p.problem },
@@ -43,9 +44,10 @@ const sections = [
         <a href="/#work" class="link-quiet back inline-flex items-center gap-1.5 font-medium no-print">
           <ArrowLeft size={16} aria-hidden="true" /> All work
         </a>
-        <p class="label mt-10">Case study</p>
+        <p class="label mt-10">{p.fictional ? 'Concept demo' : 'Case study'}</p>
         <h1 class="display title">{p.title}</h1>
         <p class="lead mt-6">{p.summary}</p>
+        {p.notice && <p class="notice mt-4">{p.notice}</p>}
 
         <dl class="facts">
           <div>
@@ -63,9 +65,13 @@ const sections = [
           <div>
             <dt class="label">Links</dt>
             <dd class="links">
-              <a href={p.live} class="link inline-flex items-center gap-1" rel="noopener">
-                Live site <ArrowUpRight size={14} aria-hidden="true" />
-              </a>
+              {
+                p.live && (
+                  <a href={p.live} class="link inline-flex items-center gap-1" rel="noopener">
+                    Live site <ArrowUpRight size={14} aria-hidden="true" />
+                  </a>
+                )
+              }
               {
                 p.repos.map((r) => (
                   <a href={r.href} class="link inline-flex items-center gap-1" rel="noopener">
@@ -76,7 +82,7 @@ const sections = [
             </dd>
           </div>
         </dl>
-        <p class="small wake">Free-hosted apps can take about a minute to wake up on the first visit.</p>
+        {p.freeHosted && <p class="small wake">Free-hosted apps can take about a minute to wake up on the first visit.</p>}
       </header>
 
       <figure class="wrap shot grid-12">
@@ -173,6 +179,11 @@ const sections = [
     .links {
       row-gap: 0;
     }
+  }
+  .notice {
+    color: var(--text-2);
+    font-style: italic;
+    font-size: var(--step-0);
   }
   .wake {
     margin-top: 1rem;

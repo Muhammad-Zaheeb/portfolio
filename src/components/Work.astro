@@ -6,13 +6,14 @@ import SectionHead from './SectionHead.astro';
 import { projects } from '../data/site';
 import novachat from '../assets/novachat.jpg';
 import campusflow from '../assets/campusflow.jpg';
+import galiNau from '../assets/gali-nau.jpg';
 
-const images = { novachat, campusflow } as const;
+const images = { novachat, campusflow, 'gali-nau': galiNau } as const;
 ---
 
 <section id="work" class="section wrap" aria-labelledby="work-title">
   <SectionHead id="work-title" num="01" label="Work" title="Selected work">
-    Two projects I built end to end. Both are live, and the code is public.
+    Three projects I built end to end, with the code public. Two are live apps; the third is a concept demo of a fictional cafe.
   </SectionHead>
 
   <ol class="rows">
@@ -35,6 +36,7 @@ const images = { novachat, campusflow } as const;
               <a href={`/work/${p.slug}`}>{p.title}</a>
             </h3>
             <p class="row-summary">{p.summary}</p>
+            {p.notice && <p class="small notice">{p.notice}</p>}
             <dl class="row-meta small">
               <div>
                 <dt class="label">Stack</dt>
@@ -54,9 +56,11 @@ const images = { novachat, campusflow } as const;
               >
                 Read the case study <ArrowRight size={16} aria-hidden="true" />
               </a>
-              <a href={p.live} class="link inline-flex items-center gap-1" rel="noopener">
-                Live site<span class="sr-only"> for {p.title}</span> <ArrowUpRight size={15} aria-hidden="true" />
-              </a>
+              {p.live && (
+                <a href={p.live} class="link inline-flex items-center gap-1" rel="noopener">
+                  Live site<span class="sr-only"> for {p.title}</span> <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+              )}
               <a href={p.github} class="link inline-flex items-center gap-1" rel="noopener">
                 Code<span class="sr-only"> for {p.title}</span> <ArrowUpRight size={15} aria-hidden="true" />
               </a>
@@ -66,7 +70,7 @@ const images = { novachat, campusflow } as const;
       ))
     }
   </ol>
-  <p class="small footnote">Both apps run on free hosting and can take about a minute to wake up on the first visit.</p>
+  <p class="small footnote">NovaChat and CampusFlow run on free hosting and can take about a minute to wake up on the first visit.</p>
 </section>
 
 <style>
@@ -108,6 +112,11 @@ const images = { novachat, campusflow } as const;
     margin-top: 1rem;
     max-width: 40ch;
     color: var(--text-2);
+  }
+  .notice {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
   }
   .row-meta {
     margin-top: 1.5rem;

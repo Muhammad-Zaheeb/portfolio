@@ -53,7 +53,7 @@ export function projectLd(p: Project, base?: URL) {
     description: p.summary,
     url: at(base, `/work/${p.slug}/`),
     author: { '@type': 'Person', name: site.name, url: at(base, '/') },
-    workExample: { '@type': 'WebApplication', name: p.title, url: p.live },
+    ...(p.live ? { workExample: { '@type': 'WebApplication', name: p.title, url: p.live } } : {}),
     hasPart: p.repos.map((r) => ({
       '@type': 'SoftwareSourceCode',
       name: `${p.title}: ${r.label}`,

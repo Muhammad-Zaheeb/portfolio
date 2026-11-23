@@ -107,33 +107,34 @@ export const projects = [
     slug: 'gali-nau',
     title: 'Gali Nau (concept demo)',
     summary:
-      'A sample website for a neighbourhood cafe: menu, opening hours with an open-now sign, directions and ordering on WhatsApp.',
+      'A loud, playful sample website for a fictional cafe: an illustrated street you can poke, a menu you build an order from, a chai you mix yourself, and the order sent on WhatsApp.',
     type: 'Concept demo, fictional cafe',
     fictional: true,
     freeHosted: false,
     notice: 'Concept demo of a fictional cafe. Not a client project.',
-    stackShort: 'Astro, Tailwind CSS, TypeScript',
-    proof: 'Lighthouse 100 for speed, accessibility and best practices',
+    stackShort: 'Astro, Tailwind CSS, TypeScript, original SVG',
+    proof: 'Original SVG art, no animation library, works without JavaScript',
     live: GALI_NAU_LIVE_URL,
     github: 'https://github.com/Muhammad-Zaheeb/cafe-demo',
     repos: [{ label: 'Source on GitHub', href: 'https://github.com/Muhammad-Zaheeb/cafe-demo' }],
     seoDescription:
-      'Concept demo: Gali Nau, a sample website for a fictional neighbourhood cafe, built with Astro and Tailwind CSS. Not a client project.',
+      'Concept demo: Gali Nau, an interactive sample website for a fictional neighbourhood cafe, with an order tray that sends on WhatsApp. Built with Astro and Tailwind CSS. Not a client project.',
     imageAlt:
-      'Gali Nau concept demo home page in dark mode: the headline "Chai, coffee and breakfast, on Lane Nine." beside a card of opening hours.',
+      'Gali Nau concept demo home page: the headline "Chai, coffee & breakfast on Lane Nine" beside an illustrated street at night, with the cafe between a pharmacy and a mechanic, string lights, a kite and a green door.',
     problem:
-      'Most small cafes need the same few things online: a menu people can read on a phone, opening hours that are right today, a way to find the place and a quick way to order. I wanted to show what that looks like, so a cafe owner can judge it before talking to me.',
+      'Most small cafes need the same few things online: a menu people can read on a phone, opening hours that are right today, a way to find the place and a quick way to order. I wanted to show what that can look like when it has some personality, so a cafe owner can judge it before talking to me.',
     solution:
-      'A single page for an invented cafe. The menu has a sticky category bar. An open-now sign and today\'s row in the hours are worked out from the hours table, including a prayer break on Friday. Directions open in the visitor\'s own maps app, and an order button opens WhatsApp with a message already typed. The menu, hours, address and colours each live in one file, so changing them does not touch the page code.',
+      'A single page for an invented cafe, drawn to be played with. The hero is an illustrated street whose layers shift with the mouse, phone tilt and scroll; after 6 pm it turns to evening, and the sun, cat, chai and door respond to a tap. The menu has category tabs and an order tray that totals the order and writes a WhatsApp message from it. A "mix your own chai" lab names and prices each cup, and a scroll story walks past eight shops to the door. A hanging sign flips between open and closed using the opening hours, including a prayer break on Friday. Directions open in the visitor\'s own maps app. The menu, hours, address and colours each live in one file.',
     stack: [
       ['Framework', 'Astro (static output), TypeScript'],
-      ['Styling', 'Tailwind CSS, self-hosted Fraunces and Instrument Sans fonts'],
-      ['Script', 'One small inline script, no libraries. The page works without it.'],
-      ['Look', 'No photos or logos; type, CSS and one original street-sign mark'],
+      ['Styling', 'Tailwind CSS, self-hosted open-licence fonts (Shrikhand and Bricolage Grotesque)'],
+      ['Script', 'No framework runtime and no animation library; about 21 KB of script, loaded section by section. The page works without it.'],
+      ['Look', 'All illustration, including sixteen food drawings, is original inline SVG; no photos or logos'],
+      ['Accessibility', 'Keyboard-usable tabs, buttons and tray dialog, and a still version of every animation for reduced motion'],
       ['Sharing', 'Social preview image drawn at build time'],
     ],
     outcome:
-      'A demo, not a client result. Lighthouse scores 100 for performance, accessibility and best practices on mobile and desktop. The whole thing is a fictional business: the name, menu, prices and address are all made up, and the page says so. It is kept out of search results on purpose.',
+      'A demo, not a client result. It shows an interactive menu, order tray, chai lab and story section built without a framework runtime or animation library. The whole thing is a fictional business: the name, menu, prices and address are all made up, and the page says so. It is kept out of search results on purpose.',
   },
 ];
 

@@ -1,26 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../data/site';
 import { personLd, serviceLd } from '../data/schema';
 ---
 
 <Layout jsonLd={[personLd(Astro.site), serviceLd(Astro.site)]}>
-  <div id="top">
-    <Header home />
-  </div>
+  <Header home />
   <main id="main" tabindex="-1">
-    <section class="wrap intro">
-      <h1 class="h1">{site.name}</h1>
-      <p class="display italic text-4xl mt-8">{site.tagline}</p>
-    </section>
+    <Hero />
   </main>
   <Footer />
 </Layout>
-
-<style>
-  .intro {
-    padding-block: var(--section) 0;
-  }
-</style>

@@ -20,9 +20,7 @@ const { p } = Astro.props;
   ogAlt={`Case study card: ${p.title}. ${p.summary}`}
   jsonLd={[projectLd(p, Astro.site)]}
 >
-  <div id="top">
-    <Header current="Work" />
-  </div>
+  <Header current="Work" />
   <main id="main" tabindex="-1">
     <article class="wrap pt-24">
       <h1 class="h1">{p.title}</h1>

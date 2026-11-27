@@ -4,13 +4,13 @@ import { nav, site } from '../data/site';
 interface Props {
   /** Label of the nav item for the current page, e.g. "Work" on case studies. */
   current?: string;
-  /** On the home page the wordmark jumps to the top instead of reloading. */
+  /** On the home page the header lies over the hero and its links jump within the page. */
   home?: boolean;
 }
 const { current, home = false } = Astro.props;
 ---
 
-<header class="site-header wrap">
+<header class:list={['site-header', 'wrap', { overlay: home }]}>
   <a href={home ? '#top' : '/'} class="wordmark display">{site.name}</a>
   <nav aria-label="Main" class="no-print">
     <ul>
@@ -41,6 +41,10 @@ const { current, home = false } = Astro.props;
     align-items: center;
     gap: 4px 32px;
     padding-top: 26px;
+  }
+  .overlay {
+    position: absolute;
+    inset: 0 0 auto;
   }
   .wordmark {
     display: inline-flex;

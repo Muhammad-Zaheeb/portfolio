@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import { projectImages, widthsFor } from '../data/images';
+import { projects, story } from '../data/site';
+
+interface Props {
+  sizes: string;
+  loading?: 'eager' | 'lazy';
+}
+const { sizes, loading = 'lazy' } = Astro.props;
+const render = projectImages['event-horizon'];
+const alt = projects[0].imageAlt;
+---
+
+<div class="annotated">
+  <Image src={render} alt={alt} widths={widthsFor(render)} sizes={sizes} format="webp" quality={82} loading={loading} />
+  {/* Coordinates are in the render's own 1440 × 810 space, traced over the features they name. */}
+  <svg aria-hidden="true" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice">
+    <g data-note="0">
+      <circle pathLength="1" cx="719" cy="406" r="139"></circle>
+      <path pathLength="1" d="M818 308 L1040 130 H1350"></path>
+      <text x="1350" y="112" text-anchor="end">{story[0].label}</text>
+    </g>
+    <g data-note="1">
+      <path pathLength="1" d="M462 332 C 528 262, 578 163, 720 163 C 868 163, 918 262, 990 336"></path>
+      <path pathLength="1" d="M530 596 C 580 618, 650 624, 720 624 C 800 624, 868 608, 912 582"></path>
+      <path pathLength="1" d="M556 214 L460 110 H90"></path>
+      <text x="90" y="92">{story[1].label}</text>
+    </g>
+    <g data-note="2">
+      <path pathLength="1" d="M90 726 H1350"></path>
+      <path pathLength="1" d="M90 130 V90 H130 M1310 90 H1350 V130"></path>
+      <text x="90" y="706">{story[2].label}</text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .annotated {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #050505;
+  }
+  img,
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  img {
+    object-fit: cover;
+  }
+  path,
+  circle {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+  }
+  text {
+    fill: var(--text);
+    font: 500 32px var(--font-body);
+    paint-order: stroke;
+    stroke: rgb(0 0 0 / 0.75);
+    stroke-width: 6;
+    stroke-linejoin: round;
+  }
+  @media (max-width: 860px) {
+    path,
+    circle {
+      stroke-width: 5;
+    }
+    /* Too small to read at phone width; the label is shown under the image instead. */
+    text {
+      display: none;
+    }
+  }
+</style>

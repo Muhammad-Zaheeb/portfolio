@@ -1,0 +1,285 @@
+---
+import AnnotatedRender from './AnnotatedRender.astro';
+import { projects, story } from '../data/site';
+
+const eh = projects[0];
+---
+
+<section id="story" class="wrap story" aria-labelledby="story-title" data-story>
+  <h2 id="story-title" class="h2 title">Event Horizon, in three parts</h2>
+  <p class="lead">{eh.summary} I conceived and directed it.</p>
+
+  <div class="grid">
+    <div class="side">
+      <div class="stage">
+        <div data-stage>
+          <AnnotatedRender sizes="(min-width: 861px) 62vw, 100vw" />
+        </div>
+        <p class="caption" aria-hidden="true">
+          {story.map((s, i) => <span data-caption={i} class:list={{ on: i === 0 }}>{s.label}</span>)}
+        </p>
+      </div>
+      <div class="links">
+        <div class="buttons">
+          <a href={eh.live} class="btn btn-line" rel="noopener">Open the live demo</a>
+          <a href={`/work/${eh.slug}/`} class="tap case">Read the case study</a>
+        </div>
+        <p class="credit">{eh.credit}</p>
+      </div>
+    </div>
+
+    <ol class="chapters">
+      {
+        story.map((s, i) => (
+          <li>
+            <button type="button" class:list={['chapter', { on: i === 0 }]} data-chapter={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+              <span class="chapter-title display">{s.title}</span>
+              <span class="chapter-text">{s.text}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-story]');
+  if (section) {
+    const chapters = [...section.querySelectorAll<HTMLButtonElement>('[data-chapter]')];
+    const notes = [...section.querySelectorAll<SVGGElement>('[data-note]')];
+    const captions = [...section.querySelectorAll<HTMLElement>('[data-caption]')];
+    const stage = section.querySelector<HTMLElement>('[data-stage]')!;
+    let active = 0;
+    let seen = false;
+
+    const paint = () => {
+      chapters.forEach((c, i) => {
+        c.classList.toggle('on', i === active);
+        c.setAttribute('aria-pressed', String(i === active));
+      });
+      // Lines wait until the render is on screen, so the visitor sees them drawn.
+      notes.forEach((n, i) => n.classList.toggle('on', seen && i === active));
+      captions.forEach((c, i) => c.classList.toggle('on', i === active));
+    };
+    const pick = (i: number) => {
+      if (i === active) return;
+      active = i;
+      paint();
+    };
+
+    chapters.forEach((c, i) => {
+      c.addEventListener('click', () => pick(i));
+      c.addEventListener('focus', () => pick(i));
+      // Real mouse movement only: chapters scrolling under a resting cursor leave the scroll in charge.
+      c.addEventListener('pointermove', (e) => e.pointerType === 'mouse' && pick(i));
+    });
+
+    // The chapter crossing the reading line takes over. On phones the line sits below the pinned image.
+    const phone = window.matchMedia('(max-width: 860px)');
+    let spy: IntersectionObserver | undefined;
+    const watch = () => {
+      spy?.disconnect();
+      spy = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && pick(Number((e.target as HTMLElement).dataset.chapter))),
+        { rootMargin: phone.matches ? '-62% 0px -37% 0px' : '-49.5% 0px -49.5% 0px' },
+      );
+      chapters.forEach((c) => spy!.observe(c));
+    };
+    watch();
+    phone.addEventListener('change', watch);
+
+    new IntersectionObserver(
+      (entries, observer) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        seen = true;
+        paint();
+        observer.disconnect();
+      },
+      { threshold: 0.5 },
+    ).observe(stage);
+    paint();
+  }
+</script>
+
+<style>
+  .story {
+    padding-top: var(--section);
+  }
+  .title {
+    max-width: 900px;
+  }
+  .lead {
+    max-width: 56ch;
+    margin-top: 20px;
+    color: var(--text-2);
+  }
+  .grid {
+    display: flex;
+    flex-direction: column;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+  .caption {
+    display: none;
+  }
+
+  .chapter {
+    display: block;
+    width: 100%;
+    padding: 28px 0 28px 20px;
+    border-left: 1px solid var(--rule);
+    color: var(--dim);
+    text-align: left;
+    cursor: pointer;
+    transition:
+      color 0.5s,
+      border-color 0.5s;
+  }
+  .chapter-title {
+    display: block;
+    font-size: 2.375rem;
+    line-height: 1.1;
+  }
+  .chapter-text {
+    display: block;
+    max-width: 46ch;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+  .chapter:focus-visible {
+    outline-offset: 2px;
+  }
+  /* Without a script every chapter reads at full strength. */
+  :global(.js) .chapter.on,
+  :global(html:not(.js)) .chapter {
+    color: var(--text);
+    border-left-color: var(--gold);
+  }
+
+  .links {
+    margin-top: 32px;
+  }
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 28px;
+  }
+  .case {
+    font-weight: 500;
+  }
+  .credit {
+    max-width: 60ch;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  /* Annotation lines draw themselves in. */
+  :global(.js) .stage :global(:is(path, circle)) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    transition:
+      stroke-dashoffset 1.1s cubic-bezier(0.6, 0, 0.2, 1),
+      opacity 0.3s ease 0.2s;
+  }
+  :global(.js) .stage :global(text) {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  :global(.js) .stage :global(.on :is(path, circle)) {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    transition:
+      stroke-dashoffset 1.1s cubic-bezier(0.6, 0, 0.2, 1),
+      opacity 0.1s;
+  }
+  :global(.js) .stage :global(.on text) {
+    opacity: 1;
+    transition: opacity 0.6s ease 0.5s;
+  }
+
+  /* Phones: the render stays pinned at the top while the chapters scroll beneath it. */
+  @media (max-width: 860px) {
+    .side {
+      display: contents;
+    }
+    .chapters {
+      order: 2;
+    }
+    .links {
+      order: 3;
+    }
+    .stage {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      order: 1;
+      margin-inline: calc(-1 * var(--pad));
+      padding-bottom: 14px;
+      background: var(--ground);
+      box-shadow: 0 18px 24px -6px var(--ground);
+    }
+    :global(.js) .caption {
+      display: grid;
+      padding: 12px var(--pad) 0;
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .caption span {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .caption span.on {
+      opacity: 1;
+    }
+    .chapters {
+      padding-top: 8px;
+    }
+    :global(.js) .chapter {
+      min-height: 34svh;
+    }
+  }
+  /* Too short to pin anything. */
+  @media (max-width: 860px) and (max-height: 520px) {
+    .stage {
+      position: static;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      column-gap: clamp(40px, 5vw, 72px);
+      align-items: start;
+    }
+    .side {
+      position: sticky;
+      top: max(32px, calc((100vh - 540px) / 2));
+    }
+    .chapter {
+      padding: 44px 0 44px 28px;
+    }
+    :global(.js) .chapter {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 44vh;
+    }
+  }
+  @media print {
+    .side,
+    .stage {
+      position: static;
+    }
+    .chapter {
+      min-height: 0 !important;
+      padding-block: 8px;
+      color: var(--text);
+    }
+  }
+</style>

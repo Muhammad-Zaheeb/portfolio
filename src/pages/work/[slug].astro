@@ -1,15 +1,35 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { projects } from '../../data/site';
+import AnnotatedRender from '../../components/AnnotatedRender.astro';
+import { projects, story } from '../../data/site';
+import { projectImages, widthsFor } from '../../data/images';
 import { projectLd } from '../../data/schema';
 
 export function getStaticPaths() {
-  return projects.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+  return projects.map((p, i) => ({
+    params: { slug: p.slug },
+    props: { p, next: projects[(i + 1) % projects.length] },
+  }));
 }
 
-const { p } = Astro.props;
+const { p, next } = Astro.props;
+const image = projectImages[p.slug];
+const nextImage = projectImages[next.slug];
+const annotated = p.slug === 'event-horizon';
+
+const facts = [
+  { term: 'Type', detail: p.type },
+  p.role ? { term: 'My role', detail: p.role } : undefined,
+  { term: 'Stack', detail: p.stackShort },
+].filter((f) => f !== undefined);
+
+const sections = [
+  { heading: p.problemHeading, text: p.problem },
+  { heading: p.problemHeading === 'Aim' ? 'How it works' : 'Solution', text: p.solution },
+];
 ---
 
 <Layout
@@ -22,10 +42,304 @@ const { p } = Astro.props;
 >
   <Header current="Work" />
   <main id="main" tabindex="-1">
-    <article class="wrap pt-24">
-      <h1 class="h1">{p.title}</h1>
-      <p class="mt-6 max-w-[56ch] text-text-2">{p.summary}</p>
+    <article>
+      <header class="wrap intro">
+        <a href="/#work" class="tap back no-print">All work</a>
+        <h1 class="h1">{p.title}</h1>
+        <div class="below">
+          <p class="summary display">{p.summary}</p>
+          <div>
+            {p.notice && <p class="notice">{p.notice}</p>}
+            <div class="actions">
+              <a href={p.live} class="btn btn-solid" rel="noopener">
+                {annotated ? 'Open the live demo' : `Open ${p.title}`}
+              </a>
+              {
+                p.repos.map((r) => (
+                  <a href={r.href} class="btn btn-line" rel="noopener">
+                    {r.label}
+                  </a>
+                ))
+              }
+            </div>
+            {p.hostNote && <p class="wake">{p.hostNote}</p>}
+          </div>
+        </div>
+      </header>
+
+      <figure class="wrap shot">
+        {
+          annotated ? (
+            <div class="annotations">
+              <AnnotatedRender sizes="(min-width: 1320px) 1208px, 92vw" loading="eager" />
+              <figcaption>
+                Marked: {story[0].label.toLowerCase()} and {story[1].label.toLowerCase()}.
+              </figcaption>
+            </div>
+          ) : (
+            <Image
+              src={image}
+              alt={p.imageAlt}
+              widths={widthsFor(image)}
+              sizes="(min-width: 1100px) 988px, 92vw"
+              format="webp"
+              loading="eager"
+              fetchpriority="high"
+              class="screen"
+            />
+          )
+        }
+      </figure>
+
+      <div class="wrap">
+        <dl class="facts">
+          {
+            facts.map((f) => (
+              <div>
+                <dt>{f.term}</dt>
+                <dd>{f.detail}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        {
+          sections.map((s) => (
+            <section class="part">
+              <h2 class="display">{s.heading}</h2>
+              <p>{s.text}</p>
+            </section>
+          ))
+        }
+        <section class="part">
+          <h2 class="display">Stack</h2>
+          <dl class="stack">
+            {
+              p.stack.map(([k, v]) => (
+                <div>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
+        <section class="part">
+          <h2 class="display">Result</h2>
+          <p>{p.outcome}</p>
+        </section>
+        {
+          p.credit && (
+            <section class="part">
+              <h2 class="display">Credits</h2>
+              <p>{p.credit}</p>
+            </section>
+          )
+        }
+      </div>
     </article>
+
+    <nav class="wrap next no-print" aria-label="Next case study">
+      <a href={`/work/${next.slug}/`} class="next-link">
+        <span>
+          <span class="next-label">Next case study</span>
+          <span class="next-title display">{next.title}</span>
+        </span>
+        <Image src={nextImage} alt="" widths={[320, 480, 800]} sizes="(min-width: 700px) 360px, 92vw" format="webp" loading="lazy" />
+      </a>
+    </nav>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .intro {
+    padding-top: clamp(32px, 5vw, 72px);
+  }
+  .back {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .h1 {
+    margin-top: 16px;
+  }
+  .below {
+    display: grid;
+    gap: 28px 64px;
+    margin-top: clamp(24px, 3vw, 36px);
+    padding-top: 28px;
+    border-top: 1px solid rgb(236 231 223 / 0.22);
+  }
+  .summary {
+    max-width: 24em;
+    font-size: clamp(1.75rem, 2.6vw, 2.375rem);
+    font-style: italic;
+    line-height: 1.2;
+  }
+  .notice {
+    margin-bottom: 16px;
+    color: var(--gold);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wake {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  @media (min-width: 1000px) {
+    .below {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+    .below > div {
+      justify-self: end;
+      max-width: 520px;
+    }
+  }
+
+  .shot {
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+  /* Screenshots are never stretched far past their own size. */
+  .screen {
+    width: 100%;
+    max-width: 988px;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top left;
+    margin-inline: auto;
+    border: 1px solid var(--rule);
+  }
+  /* On the Event Horizon page the first two annotations are shown together. */
+  .annotations :global([data-note='2']) {
+    display: none;
+  }
+  /* The labels inside the render are hidden on phones, so name the marks underneath. */
+  figcaption {
+    margin-top: 12px;
+    color: var(--gold);
+    font-size: 0.875rem;
+  }
+  @media (min-width: 861px) {
+    figcaption {
+      display: none;
+    }
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 0 40px;
+    margin-top: clamp(56px, 7vw, 96px);
+  }
+  .facts > div {
+    padding: 20px 0 24px;
+    border-top: 1px solid var(--gold);
+  }
+  .facts dt {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .facts dd {
+    margin-top: 4px;
+    font-size: 1.0625rem;
+  }
+
+  .part {
+    display: grid;
+    gap: 12px 72px;
+    padding-block: clamp(32px, 4vw, 56px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .part:first-of-type {
+    margin-top: 24px;
+  }
+  .part h2 {
+    font-size: clamp(2.25rem, 3.4vw, 3rem);
+    line-height: 1.05;
+  }
+  .part p,
+  .stack {
+    max-width: 64ch;
+    color: var(--text-2);
+  }
+  .part p {
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .stack > div {
+    display: grid;
+    gap: 2px 20px;
+    padding-block: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .stack > div:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .stack dt {
+    color: var(--text);
+    font-weight: 500;
+  }
+  @media (min-width: 600px) {
+    .stack > div {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+    }
+  }
+  @media (min-width: 861px) {
+    .part {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    }
+  }
+
+  .next {
+    padding-top: clamp(64px, 8vw, 120px);
+  }
+  .next-link {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 24px 48px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .next-label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .next-title {
+    display: block;
+    margin-top: 8px;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+    transition: text-decoration-color 0.4s;
+  }
+  .next-link:hover .next-title {
+    text-decoration-color: var(--gold);
+  }
+  .next-link :global(img) {
+    width: 360px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top left;
+    opacity: 0.55;
+    transition: opacity 0.4s;
+  }
+  .next-link:hover :global(img),
+  .next-link:focus-visible :global(img) {
+    opacity: 1;
+  }
+</style>

@@ -1,0 +1,294 @@
+---
+import { Image } from 'astro:assets';
+import { projectImages, widthsFor } from '../data/images';
+import { projects, smallProject } from '../data/site';
+
+// Event Horizon has its own section above.
+const list = projects.filter((p) => p.slug !== 'event-horizon');
+---
+
+<section id="work" class="wrap work" aria-labelledby="work-title" data-projects>
+  <div class="head">
+    <h2 id="work-title" class="h2">More work, all live</h2>
+    <p class="hint js-only">Choose a project to bring it forward.</p>
+  </div>
+
+  <div class="stage">
+    {
+      list.map((p, i) => (
+        <Image
+          src={projectImages[p.slug]}
+          alt={p.imageAlt}
+          widths={widthsFor(projectImages[p.slug])}
+          sizes="(min-width: 1320px) 1208px, 92vw"
+          format="webp"
+          loading="lazy"
+          class:list={['shot', { on: i === 0 }]}
+          aria-hidden={i === 0 ? 'false' : 'true'}
+          data-shot={p.slug}
+        />
+      ))
+    }
+  </div>
+
+  <div class="panels">
+    {
+      list.map((p, i) => (
+        <article class:list={['panel', { on: i === 0 }]} data-panel={p.slug}>
+          <div>
+            <h3 class="display">{p.title}</h3>
+            <p class="card">{p.card}</p>
+          </div>
+          <div class="meta">
+            <p class="facts">{p.facts}</p>
+            {p.hostNote && <p class="note">Free hosting: the first load can take a minute.</p>}
+            <p class="actions">
+              <a href={p.live} class="tap" rel="noopener">
+                Open {p.title}
+              </a>
+              <a href={`/work/${p.slug}/`} class="tap">
+                Case study<span class="sr-only">: {p.title}</span>
+              </a>
+            </p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="thumbs js-only" role="group" aria-label="Choose a project">
+    {
+      list.map((p, i) => (
+        <button type="button" class:list={['thumb', { on: i === 0 }]} data-pick={p.slug} aria-pressed={i === 0 ? 'true' : 'false'}>
+          <Image src={projectImages[p.slug]} alt="" widths={[320, 480, 800]} sizes="(min-width: 860px) 390px, 92vw" format="webp" loading="lazy" />
+          <span class="row">
+            <span class="name">{p.title}</span>
+            <span>{p.kind}</span>
+          </span>
+        </button>
+      ))
+    }
+  </div>
+
+  <p class="small-project">
+    {smallProject.text} <a href={smallProject.href} class="tap" rel="noopener">Source on GitHub</a>
+  </p>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-projects]');
+  if (section) {
+    const buttons = [...section.querySelectorAll<HTMLButtonElement>('[data-pick]')];
+    const shots = [...section.querySelectorAll<HTMLElement>('[data-shot]')];
+    const panels = [...section.querySelectorAll<HTMLElement>('[data-panel]')];
+
+    const pick = (slug: string) => {
+      buttons.forEach((b) => {
+        const on = b.dataset.pick === slug;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      shots.forEach((s) => {
+        const on = s.dataset.shot === slug;
+        s.classList.toggle('on', on);
+        s.setAttribute('aria-hidden', String(!on));
+      });
+      panels.forEach((p) => p.classList.toggle('on', p.dataset.panel === slug));
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => pick(b.dataset.pick!)));
+  }
+</script>
+
+<style>
+  .work {
+    padding-top: var(--section);
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+  }
+  .hint {
+    max-width: 360px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  .stage {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    margin-top: clamp(32px, 4vw, 48px);
+    background: var(--panel);
+  }
+  .shot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.9s ease,
+      transform 6s ease-out,
+      visibility 0s linear 0.9s;
+  }
+  .shot.on {
+    opacity: 1;
+    visibility: visible;
+    /* The chosen screen drifts very slightly closer. */
+    transform: scale(1.04);
+    transition:
+      opacity 0.9s ease,
+      transform 6s ease-out;
+  }
+
+  /* All panels share one cell, so switching never moves the page. */
+  .panels {
+    display: grid;
+    margin-top: 28px;
+  }
+  .panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 16px 48px;
+    align-content: start;
+    align-items: end;
+  }
+  :global(.js) .panel {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.4s ease,
+      visibility 0s linear 0.4s;
+  }
+  :global(.js) .panel.on {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.7s ease 0.15s;
+  }
+  :global(html:not(.js)) .panel + .panel {
+    margin-top: 40px;
+  }
+  h3 {
+    font-size: clamp(2.75rem, 4vw, 3.5rem);
+    line-height: 1;
+  }
+  .card {
+    max-width: 560px;
+    margin-top: 10px;
+    color: var(--text-2);
+  }
+  .facts {
+    color: var(--soft);
+    font-size: 0.9375rem;
+  }
+  .note {
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
+    margin-top: 6px;
+  }
+  @media (min-width: 760px) {
+    .meta {
+      text-align: right;
+    }
+    .actions {
+      justify-content: flex-end;
+    }
+  }
+
+  .thumbs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.6vw, 20px);
+    margin-top: 20px;
+  }
+  .thumb {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--dim);
+    text-align: left;
+    cursor: pointer;
+    transition:
+      color 0.4s,
+      border-color 0.4s;
+  }
+  .thumb:hover,
+  .thumb.on {
+    color: var(--text);
+    border-bottom-color: var(--gold);
+  }
+  .thumb:focus-visible {
+    outline-offset: 4px;
+  }
+  .thumb :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top left;
+    opacity: 0.55;
+    transition: opacity 0.4s;
+  }
+  .thumb:hover :global(img),
+  .thumb.on :global(img) {
+    opacity: 1;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 12px;
+    font-size: 0.9375rem;
+  }
+  .name {
+    font-weight: 500;
+  }
+  @media (max-width: 600px) {
+    .row {
+      display: grid;
+      font-size: 0.8125rem;
+      line-height: 1.4;
+    }
+  }
+
+  .small-project {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 14px;
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  @media print {
+    .stage,
+    .thumbs,
+    .hint {
+      display: none !important;
+    }
+    .panel {
+      grid-area: auto !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      margin-bottom: 20px;
+    }
+  }
+</style>

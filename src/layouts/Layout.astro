@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-import serifUrl from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
-import sansUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import displayUrl from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2?url';
+import sansUrl from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url';
 import { site } from '../data/site';
 
 interface Props {
@@ -10,20 +10,27 @@ interface Props {
   /** Slug of the generated Open Graph image in /og/, e.g. "home" or a project slug. */
   og?: string;
   ogType?: 'website' | 'article';
-  /** Alt text for the Open Graph image, which is a text card. Describes the card, not the page title. */
+  /** Alt text for the Open Graph image. Describes the card, not the page title. */
   ogAlt?: string;
   jsonLd?: Record<string, unknown>[];
   /** Keep the page out of search results and skip canonical and og:url (used by the 404 page). */
   noindex?: boolean;
 }
 
-const { title = site.title, description = site.description, og = 'home', ogType = 'website', ogAlt = 'Muhammad Zaheeb. I build websites and web apps for small businesses. Fixed written quotes. Prices in USD, from $100.', jsonLd = [], noindex = false } =
-  Astro.props;
+const {
+  title = site.title,
+  description = site.description,
+  og = 'home',
+  ogType = 'website',
+  ogAlt = 'Muhammad Zaheeb. Software that bends to the rules. A rendered black hole behind the name.',
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
 
 // Absolute URLs need the production domain (SITE_URL). Without it, fall back to root-relative paths.
 const abs = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
 const canonical = Astro.site && !noindex ? new URL(Astro.url.pathname, Astro.site).href : undefined;
-const ogImage = abs(`/og/${og}.png`);
+const ogImage = abs(`/og/${og}.jpg`);
 ---
 
 <!doctype html>
@@ -35,9 +42,8 @@ const ogImage = abs(`/og/${og}.png`);
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     {canonical && <link rel="canonical" href={canonical} />}
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#000000" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="author" content={site.name} />
     <meta name="generator" content={Astro.generator} />
@@ -48,6 +54,7 @@ const ogImage = abs(`/og/${og}.png`);
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogAlt} />
@@ -58,37 +65,19 @@ const ogImage = abs(`/og/${og}.png`);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
 
-    <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={displayUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
+    <slot name="head" />
 
-    <noscript>
-      <style>
-        [data-theme-toggle],
-        [data-copy] {
-          display: none !important;
-        }
-      </style>
-    </noscript>
-
+    {/* Marks that scripts run, so script-only controls can be hidden without them. */}
     <script is:inline>
-      (function () {
-        var saved = null;
-        try {
-          saved = localStorage.getItem('theme');
-        } catch (e) {}
-        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-      })();
+      document.documentElement.classList.add('js');
     </script>
 
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />)}
   </head>
   <body class="min-h-screen">
-    <a
-      href="#main"
-      class="sr-only-focusable no-print fixed left-3 top-3 z-50 rounded-[2px] bg-text px-4 py-2 text-sm font-medium text-bg"
-      >Skip to content</a
-    >
+    <a href="#main" class="skip btn btn-solid no-print fixed left-3 top-3 z-50">Skip to content</a>
     <slot />
   </body>
 </html>

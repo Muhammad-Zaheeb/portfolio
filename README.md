@@ -9,7 +9,7 @@ Static portfolio site for Muhammad Zaheeb, built with Astro, Tailwind CSS and Ty
 | `src/data/site.ts`        | All content: projects, services, FAQ, research and contact details |
 | `src/data/schema.ts`      | Structured data (JSON-LD)                                         |
 | `src/components/`         | One component per section of the home page                        |
-| `src/scripts/`            | The hero lens, and the helper that pauses animations when unseen  |
+| `src/scripts/`            | The helper that pauses animations when unseen                     |
 | `src/pages/work/`         | Case study pages                                                  |
 | `src/pages/og/`           | Social preview images, drawn at build time                        |
 

@@ -1,0 +1,67 @@
+---
+import { services } from '../data/site';
+---
+
+<section id="services" class="wrap services" aria-labelledby="services-title">
+  <h2 id="services-title" class="h2">For small businesses, the same care at a small-business price</h2>
+  <ul>
+    {
+      services.map((s) => (
+        <li>
+          <p class="price display">
+            <span class="sr-only">From </span>${s.price}
+          </p>
+          <h3>{s.title}, from</h3>
+          <p class="summary">{s.summary}</p>
+          <p class="time">Usually {s.time}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="note">All prices are in US dollars. You get a written quote and a firm timeline before any work starts.</p>
+</section>
+
+<style>
+  .services {
+    padding-top: var(--section);
+  }
+  h2 {
+    max-width: 900px;
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 0 40px;
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    padding-block: 28px;
+    border-top: 1px solid var(--gold);
+  }
+  .price {
+    font-size: 4rem;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  h3 {
+    margin: 18px 0 6px;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  .summary {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+  .time {
+    margin-top: 12px;
+    color: var(--soft);
+    font-size: 0.9375rem;
+  }
+  .note {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import { recognition } from '../data/site';
+---
+
+<section id="recognition" aria-labelledby="recognition-title">
+  <h2 id="recognition-title" class="h2">Recognition and activities</h2>
+  <ul>
+    {
+      recognition.map((r) => (
+        <li>
+          <h3>{r.title}</h3>
+          <p>
+            {r.detail}
+            {/* The year is already part of some names. */}
+            {r.when && !r.detail.includes(r.when) && <span class="when">{r.when}</span>}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  h2 {
+    font-size: clamp(2.75rem, 4.4vw, 4rem);
+  }
+  ul {
+    margin-top: 40px;
+  }
+  li {
+    padding-block: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 500;
+  }
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 20px;
+    margin-top: 4px;
+    color: var(--muted);
+  }
+</style>

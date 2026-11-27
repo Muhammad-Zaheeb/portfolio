@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
 import AnnotatedRender from '../../components/AnnotatedRender.astro';
 import { projects, story } from '../../data/site';
@@ -148,6 +149,8 @@ const sections = [
         <Image src={nextImage} alt="" widths={[320, 480, 800]} sizes="(min-width: 700px) 360px, 92vw" format="webp" loading="lazy" />
       </a>
     </nav>
+
+    <Contact compact />
   </main>
   <Footer />
 </Layout>

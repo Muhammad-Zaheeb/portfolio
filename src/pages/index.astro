@@ -4,6 +4,13 @@ import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Story from '../components/Story.astro';
 import Projects from '../components/Projects.astro';
+import Services from '../components/Services.astro';
+import Process from '../components/Process.astro';
+import Faq from '../components/Faq.astro';
+import About from '../components/About.astro';
+import Research from '../components/Research.astro';
+import Recognition from '../components/Recognition.astro';
+import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import { personLd, serviceLd } from '../data/schema';
 ---
@@ -14,6 +21,27 @@ import { personLd, serviceLd } from '../data/schema';
     <Hero />
     <Story />
     <Projects />
+    <Services />
+    <div class="wrap pair">
+      <Process />
+      <Faq />
+    </div>
+    <About />
+    <div class="wrap pair">
+      <Research />
+      <Recognition />
+    </div>
+    <Contact />
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+    gap: 96px 72px;
+    align-items: start;
+    padding-top: var(--section);
+  }
+</style>

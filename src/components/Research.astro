@@ -1,0 +1,47 @@
+---
+import { research, site } from '../data/site';
+
+const names = new Intl.ListFormat('en-GB', { type: 'conjunction' }).format(research.coauthors);
+---
+
+<section id="research" aria-labelledby="research-title">
+  <h2 id="research-title" class="h2">Research</h2>
+  <article>
+    <p class="status">{research.status}</p>
+    <h3 class="display">{research.title}</h3>
+    <p class="summary">{research.summary}</p>
+    <p class="authors">Co-authored with {names}, {site.university}.</p>
+  </article>
+</section>
+
+<style>
+  h2 {
+    font-size: clamp(2.75rem, 4.4vw, 4rem);
+  }
+  article {
+    margin-top: 40px;
+    padding-block: 24px;
+    border-block: 1px solid var(--rule);
+  }
+  .status {
+    color: var(--gold);
+    font-size: 0.9375rem;
+  }
+  h3 {
+    margin-top: 12px;
+    font-size: clamp(1.75rem, 2.6vw, 2.125rem);
+    font-style: italic;
+    line-height: 1.2;
+  }
+  .summary {
+    max-width: 60ch;
+    margin-top: 16px;
+    color: var(--text-2);
+  }
+  .authors {
+    max-width: 60ch;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

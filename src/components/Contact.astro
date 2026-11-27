@@ -1,6 +1,4 @@
 ---
-import MessageCircle from '@lucide/astro/icons/message-circle';
-import Copy from '@lucide/astro/icons/copy';
 import { site, whatsappUrl, mailUrl, web3formsKey, web3formsEndpoint, budgets } from '../data/site';
 
 interface Props {
@@ -8,215 +6,208 @@ interface Props {
   compact?: boolean;
 }
 const { compact = false } = Astro.props;
-const headingId = compact ? 'contact-title-compact' : 'contact-title';
 ---
 
-<section id={compact ? undefined : 'contact'} class="contact wrap" aria-labelledby={headingId}>
-  <div class="inner rule-strong">
-    <p class="label" aria-hidden="true">{compact ? 'Next step' : <><span class="tnum">06</span>&ensp;Contact</>}</p>
-    <h2 id={headingId} class="title">{compact ? 'Have a project in mind?' : 'Tell me about your project.'}</h2>
+<section id="contact" class="contact wrap" aria-labelledby="contact-title">
+  <h2 id="contact-title" class:list={['title', 'display', { compact }]}>
+    {compact ? 'Have a project in mind?' : 'Let’s make something that holds up.'}
+  </h2>
 
-    <div class="cols grid-12">
-      <div class="col-a">
-        <p class="text">WhatsApp is the fastest way to reach me. Email works too.</p>
-        <a href={whatsappUrl} class="btn btn-primary mt-6">
-          <MessageCircle size={18} aria-hidden="true" />
-          Message on WhatsApp
-        </a>
-        <p class="small mt-3 text-muted tnum">{site.whatsappDisplay}</p>
+  <div class="direct">
+    <a href={whatsappUrl} class="btn btn-solid">WhatsApp {site.whatsappDisplay}</a>
+    <a href={mailUrl} class="btn btn-line email">{site.email}</a>
+  </div>
+  <p class="extra no-print">
+    <button type="button" class="tap copy js-only" data-copy={site.email}>
+      <span data-copy-label>Copy email address</span>
+    </button>
+    <a href={site.linkedin} class="tap" rel="noopener">LinkedIn</a>
+    <a href={site.github} class="tap" rel="noopener">GitHub</a>
+  </p>
+  <p class="sr-only" aria-live="polite" data-copy-status></p>
+
+  <form class="form" action={web3formsEndpoint} method="POST" data-enquiry>
+    <h3 class="display">Or send an enquiry</h3>
+    <p class="form-note">Tell me a little about what you need. I will reply by email or WhatsApp. All fields except budget are required.</p>
+
+    <input type="hidden" name="access_key" value={web3formsKey} />
+    <input type="hidden" name="subject" value="New enquiry from the portfolio site" />
+    <input type="hidden" name="from_name" value="Portfolio contact form" />
+    <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+
+    <div class="fields">
+      <div class="field">
+        <label for="f-name">Your name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" />
+        <p id="f-name-err" class="err" data-err></p>
       </div>
-
-      <div class="col-b">
-        <p class="label">Email</p>
-        <div class="email-row">
-          <a href={mailUrl} class="email link">{site.email}</a>
-          <button type="button" class="btn btn-outline btn-sm copy no-print" data-copy={site.email} aria-label="Copy email address">
-            <Copy size={15} aria-hidden="true" />
-            <span data-copy-label>Copy</span>
-          </button>
-        </div>
-        <p class="sr-only" aria-live="polite" data-copy-status></p>
-        {
-          !compact && (
-            <div class="small mt-6">
-              <a href={site.linkedin} class="link" rel="noopener">LinkedIn</a>
-              <span class="mx-3 text-muted" aria-hidden="true">/</span>
-              <a href={site.github} class="link" rel="noopener">GitHub</a>
-            </div>
-          )
-        }
+      <div class="field">
+        <label for="f-email">Your email</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" />
+        <p id="f-email-err" class="err" data-err></p>
+      </div>
+      <div class="field wide">
+        <label for="f-budget">Budget <span class="opt">(optional, in USD)</span></label>
+        <select id="f-budget" name="budget" autocomplete="off">
+          <option value="">Choose a range</option>
+          {budgets.map((b) => <option value={b}>{b}</option>)}
+        </select>
+      </div>
+      <div class="field wide">
+        <label for="f-message">Your message</label>
+        <textarea id="f-message" name="message" rows="6" minlength="20" required aria-describedby="f-message-err"></textarea>
+        <p id="f-message-err" class="err" data-err></p>
       </div>
     </div>
 
-    <form class="form" action={web3formsEndpoint} method="POST" data-enquiry>
-      <h3 class="form-title">Or send an enquiry</h3>
-      <p class="small form-note">Tell me a little about what you need. I will reply by email or WhatsApp. All fields except budget are required.</p>
-
-      <input type="hidden" name="access_key" value={web3formsKey} />
-      <input type="hidden" name="subject" value="New enquiry from the portfolio site" />
-      <input type="hidden" name="from_name" value="Portfolio contact form" />
-      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
-
-      <div class="fields">
-        <div class="field">
-          <label for="f-name">Your name</label>
-          <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" />
-          <p id="f-name-err" class="err small" data-err></p>
-        </div>
-        <div class="field">
-          <label for="f-email">Your email</label>
-          <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" />
-          <p id="f-email-err" class="err small" data-err></p>
-        </div>
-        <div class="field wide">
-          <label for="f-budget">Budget <span class="opt">(optional, in USD)</span></label>
-          <select id="f-budget" name="budget" autocomplete="off">
-            <option value="">Choose a range</option>
-            {budgets.map((b) => <option value={b}>{b}</option>)}
-          </select>
-        </div>
-        <div class="field wide">
-          <label for="f-message">Your message</label>
-          <textarea id="f-message" name="message" rows="6" minlength="20" required aria-describedby="f-message-err"></textarea>
-          <p id="f-message-err" class="err small" data-err></p>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button type="submit" class="btn btn-primary" data-submit>Send enquiry</button>
-      </div>
-      <div class="status" role="status" aria-live="polite" data-status tabindex="-1"></div>
-      <template data-fallback>
-        <a href={whatsappUrl} class="link">WhatsApp</a> or <a href={mailUrl} class="link">{site.email}</a>
-      </template>
-    </form>
-  </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-solid" data-submit>Send enquiry</button>
+    </div>
+    <div class="status" role="status" aria-live="polite" data-status tabindex="-1"></div>
+    <template data-fallback>
+      <a href={whatsappUrl}>WhatsApp</a> or <a href={mailUrl}>{site.email}</a>
+    </template>
+  </form>
 </section>
 
 <style>
   .contact {
-    padding-block: clamp(4rem, 3rem + 5vw, 8rem) clamp(5rem, 3rem + 7vw, 9rem);
-  }
-  .inner {
-    padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    padding-top: var(--section);
+    text-align: center;
   }
   .title {
-    margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-    font-size: var(--step-4);
-    line-height: 1.04;
-    letter-spacing: -0.025em;
-    max-width: 14em;
+    max-width: 1100px;
+    margin-inline: auto;
+    font-size: clamp(3.25rem, 8vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
   }
-  .cols {
-    margin-top: clamp(2.5rem, 2rem + 3vw, 4.5rem);
-    row-gap: 3rem;
+  .title.compact {
+    font-size: clamp(2.75rem, 6vw, 5.5rem);
   }
-  .text {
-    max-width: 34ch;
-    color: var(--text-2);
-    font-size: var(--step-1);
-    line-height: 1.5;
-  }
-  .email-row {
+  .direct {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1.25rem;
-    margin-top: 0.75rem;
+    justify-content: center;
+    gap: 12px;
+    margin-top: clamp(32px, 4vw, 48px);
   }
   .email {
-    font-family: var(--font-serif);
-    font-size: var(--step-2);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
     overflow-wrap: anywhere;
   }
-  .form {
-    margin-top: clamp(3rem, 2rem + 4vw, 5.5rem);
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    max-width: 44rem;
+  .extra {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 28px;
+    margin-top: 16px;
+    font-size: 0.9375rem;
   }
-  .form-title {
-    font-family: var(--font-serif);
-    font-size: var(--step-2);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+  .copy {
+    color: var(--gold);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+  .copy:hover {
+    color: var(--gold-hi);
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  .form {
+    max-width: 720px;
+    margin: clamp(64px, 8vw, 112px) auto 0;
+    padding-top: 48px;
+    border-top: 1px solid var(--rule);
+    text-align: left;
+  }
+  h3 {
+    font-size: clamp(2.25rem, 3.4vw, 3rem);
+    line-height: 1.05;
   }
   .form-note {
-    margin-top: 0.5rem;
-    color: var(--text-2);
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 1rem;
   }
   .fields {
     display: grid;
-    gap: 1.5rem 1.25rem;
-    margin-top: 2rem;
+    gap: 22px 20px;
+    margin-top: 32px;
   }
-  .field label {
+  label {
     display: block;
-    margin-bottom: 0.4rem;
-    font-size: var(--step--1);
-    font-weight: 550;
-    letter-spacing: 0.01em;
-    color: var(--text);
+    margin-bottom: 8px;
+    font-size: 0.9375rem;
+    font-weight: 500;
   }
   .opt {
-    font-weight: 400;
     color: var(--muted);
+    font-weight: 400;
   }
-  .field input,
-  .field select,
-  .field textarea {
+  input,
+  select,
+  textarea {
     display: block;
     width: 100%;
-    min-height: 3rem;
-    padding: 0.7rem 0.85rem;
+    min-height: 52px;
+    padding: 12px 22px;
+    border: 1px solid var(--edge);
+    border-radius: 26px;
     background: transparent;
     color: var(--text);
-    border: 1px solid var(--border-strong);
-    border-radius: 2px;
     font: inherit;
-    font-size: var(--step-0);
-    line-height: 1.4;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color 0.3s;
   }
-  .field textarea {
+  textarea {
+    min-height: 168px;
+    padding-block: 16px;
     resize: vertical;
-    min-height: 9rem;
   }
-  .field select {
+  select {
     appearance: none;
-    padding-right: 2.5rem;
-    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-    background-position: calc(100% - 1.2rem) 50%, calc(100% - 0.85rem) 50%;
-    background-size: 0.35rem 0.35rem;
+    padding-right: 48px;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+      calc(100% - 26px) 50%,
+      calc(100% - 20px) 50%;
+    background-size: 6px 6px;
     background-repeat: no-repeat;
   }
-  .field input:hover,
-  .field select:hover,
-  .field textarea:hover {
+  option {
+    background: #111;
+    color: var(--text);
+  }
+  input:hover,
+  select:hover,
+  textarea:hover {
     border-color: var(--text);
   }
-  .field input:focus-visible,
-  .field select:focus-visible,
-  .field textarea:focus-visible {
-    outline: 2px solid var(--accent);
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--gold);
     outline-offset: 2px;
   }
-  .field [aria-invalid='true'] {
-    border-color: var(--accent);
-    border-width: 2px;
-    padding: calc(0.7rem - 1px) calc(0.85rem - 1px);
+  [aria-invalid='true'] {
+    border-color: var(--error);
+    box-shadow: 0 0 0 1px var(--error);
   }
   .err {
-    margin-top: 0.4rem;
-    color: var(--accent);
-    font-weight: 500;
+    margin-top: 8px;
+    color: var(--error);
+    font-size: 0.9375rem;
   }
   .err:empty {
     display: none;
   }
   .actions {
-    margin-top: 2rem;
+    margin-top: 32px;
   }
   .actions .btn[disabled] {
     opacity: 0.6;
@@ -226,18 +217,16 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
     display: none;
   }
   .status {
-    margin-top: 1.25rem;
-    padding: 0.9rem 1rem;
-    border: 1px solid var(--border-strong);
-    border-left: 3px solid var(--accent);
-    border-radius: 2px;
-    color: var(--text);
+    margin-top: 20px;
+    padding: 14px 22px;
+    border: 1px solid var(--gold);
+    border-radius: 26px;
     line-height: 1.5;
   }
   .status:focus {
     outline: none;
   }
-  @media (min-width: 40rem) {
+  @media (min-width: 640px) {
     .fields {
       grid-template-columns: 1fr 1fr;
     }
@@ -245,24 +234,24 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
       grid-column: 1 / -1;
     }
   }
+  @media (max-width: 420px) {
+    .direct .btn {
+      width: 100%;
+      padding-inline: 16px;
+    }
+  }
   @media print {
     .form {
       display: none;
     }
   }
-  @media (min-width: 48rem) {
-    .col-a {
-      grid-column: 1 / span 5;
-    }
-    .col-b {
-      grid-column: 7 / span 6;
-    }
-  }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
-    const label = btn.querySelector('[data-copy-label]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+  if (btn) {
+    const label = btn.querySelector('[data-copy-label]')!;
+    const original = label.textContent;
     const status = btn.closest('section')?.querySelector('[data-copy-status]');
     let timer: number | undefined;
     btn.addEventListener('click', async () => {
@@ -283,19 +272,19 @@ const headingId = compact ? 'contact-title-compact' : 'contact-title';
           btn.focus();
           if (!ok) throw new Error('copy failed');
         }
-        if (label) label.textContent = 'Copied';
+        label.textContent = 'Copied';
         if (status) status.textContent = 'Email address copied.';
       } catch {
-        if (label) label.textContent = 'Copy failed';
+        label.textContent = 'Copy failed';
         if (status) status.textContent = 'Could not copy. Use the email link instead.';
       }
       clearTimeout(timer);
       timer = window.setTimeout(() => {
-        if (label) label.textContent = 'Copy';
+        label.textContent = original;
         if (status) status.textContent = '';
       }, 2000);
     });
-  });
+  }
 </script>
 
 <script>

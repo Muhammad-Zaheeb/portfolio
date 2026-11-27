@@ -32,6 +32,8 @@ export function startLens(hero: HTMLElement) {
   let steered = false;
   let visible = false;
   let ready = false;
+  // A pre-decoded copy of the render, so drawing it never decodes on the main thread.
+  let source: HTMLImageElement | ImageBitmap = img;
   let frame = 0;
   let last = 0;
   let clock = 0;
@@ -53,14 +55,16 @@ export function startLens(hero: HTMLElement) {
     const top = (H - h) * FOCUS_Y;
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, 2 * R, 2 * R);
-    ctx.drawImage(img, R - (x - left) * ZOOM, R - (y - top) * ZOOM, w * ZOOM, h * ZOOM);
+    ctx.drawImage(source, R - (x - left) * ZOOM, R - (y - top) * ZOOM, w * ZOOM, h * ZOOM);
     lens.style.transform = `translate3d(${x - R}px, ${y - R}px, 0)`;
   };
 
   const tick = (now: number) => {
     frame = requestAnimationFrame(tick);
-    // Half rate is plenty for a slow drift on phones.
-    if (coarse.matches && now - last < 30) return;
+    // Half rate is plenty for the slow drift, and for phones. A steered lens, or one still
+    // travelling back to its drift path, keeps the full rate.
+    const idle = !steered && Math.abs(tx - x) + Math.abs(ty - y) < 24;
+    if ((idle || coarse.matches) && now - last < 30) return;
     const dt = Math.min((now - last) / 1000, 0.1);
     last = now;
     if (!steered) {
@@ -127,14 +131,24 @@ export function startLens(hero: HTMLElement) {
   window.addEventListener('pointermove', move, { passive: true });
   document.documentElement.addEventListener('pointerleave', release);
 
-  const begin = () => {
+  const begin = async () => {
+    try {
+      source = await createImageBitmap(img);
+    } catch {
+      // The image element itself works everywhere, only less smoothly.
+    }
     ready = true;
     size();
     lens.classList.add('is-ready');
   };
-  img.decode().then(begin, () => {
-    if (img.complete && img.naturalWidth) begin();
-    else img.addEventListener('load', begin, { once: true });
+  // The lens fades in anyway, so it waits for a quiet moment and leaves the name reveal alone.
+  const whenIdle = () => {
+    if ('requestIdleCallback' in window) requestIdleCallback(begin, { timeout: 1500 });
+    else setTimeout(begin, 400);
+  };
+  img.decode().then(whenIdle, () => {
+    if (img.complete && img.naturalWidth) whenIdle();
+    else img.addEventListener('load', whenIdle, { once: true });
   });
   new ResizeObserver(() => ready && size()).observe(sky);
   reduce.addEventListener('change', () => {

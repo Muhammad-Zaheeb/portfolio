@@ -144,6 +144,11 @@
     padding-inline: var(--pad);
   }
 
+  /* Nav jumps land just above the heading, not at the top of the section's breathing room. */
+  :is(#story, #work, #services, #about, #contact) {
+    scroll-margin-top: calc(32px - var(--section));
+  }
+
   .display {
     font-family: var(--font-display);
     font-weight: 300;
@@ -244,6 +249,12 @@
   }
   .no-print {
     display: none !important;
+  }
+  .btn {
+    min-height: 0;
+    border: 1px solid #777;
+    background: none !important;
+    color: #000 !important;
   }
   a[href^="http"]:not([href*="wa.me"])::after {
     content: " (" attr(href) ")";

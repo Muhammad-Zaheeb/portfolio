@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import displayUrl from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2?url';
+import italicUrl from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-italic.woff2?url';
 import sansUrl from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url';
 import { site } from '../data/site';
 
@@ -66,6 +67,7 @@ const ogImage = abs(`/og/${og}.jpg`);
     {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
 
     <link rel="preload" href={displayUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={italicUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
     <slot name="head" />
 

@@ -70,7 +70,7 @@ const from = Math.min(...services.map((s) => s.price));
   .shade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(0 0 0 / 0) 45%, rgb(0 0 0 / 0.9));
+    background: linear-gradient(180deg, rgb(0 0 0 / 0) 45%, rgb(0 0 0 / 0.9) 90%, #000);
   }
   .lens {
     position: absolute;
@@ -164,7 +164,7 @@ const from = Math.min(...services.map((s) => s.price));
   /* On phones the text sits over the bright disk, so the shade starts higher. */
   @media (max-width: 860px) {
     .shade {
-      background: linear-gradient(180deg, rgb(0 0 0 / 0) 24%, rgb(0 0 0 / 0.55) 56%, rgb(0 0 0 / 0.92));
+      background: linear-gradient(180deg, rgb(0 0 0 / 0) 24%, rgb(0 0 0 / 0.55) 56%, rgb(0 0 0 / 0.92) 92%, #000);
     }
   }
   @media (max-width: 420px) {
@@ -172,9 +172,16 @@ const from = Math.min(...services.map((s) => s.price));
       padding-inline: 20px;
     }
   }
+  /* The header takes a third row on the narrowest phones. */
+  @media (max-width: 359px) {
+    .content {
+      padding-top: 188px;
+    }
+  }
   @media (min-width: 861px) {
     .name {
-      font-size: clamp(6rem, 11.5vw, 11.5rem);
+      /* The upper limit keeps the name on one line inside the 1320px column. */
+      font-size: clamp(6rem, 11.5vw, 10.125rem);
     }
     .intro p {
       font-size: 1.125rem;
@@ -200,7 +207,7 @@ const from = Math.min(...services.map((s) => s.price));
   /* Short laptop screens: keep the buttons in view. */
   @media (min-width: 861px) and (max-height: 760px) {
     .name {
-      font-size: clamp(6rem, min(11.5vw, 19svh), 11.5rem);
+      font-size: clamp(6rem, min(11.5vw, 19svh), 10.125rem);
     }
     .hint {
       top: 84px;

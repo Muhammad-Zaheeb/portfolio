@@ -60,7 +60,7 @@ const list = projects.filter((p) => p.slug !== 'event-horizon');
     {
       list.map((p, i) => (
         <button type="button" class:list={['thumb', { on: i === 0 }]} data-pick={p.slug} aria-pressed={i === 0 ? 'true' : 'false'}>
-          <Image src={projectImages[p.slug]} alt="" widths={[320, 480, 800]} sizes="(min-width: 860px) 390px, 92vw" format="webp" loading="lazy" />
+          <Image src={projectImages[p.slug]} alt="" widths={[240, 400, 640, 800]} sizes="(min-width: 1320px) 390px, 30vw" format="webp" loading="lazy" />
           <span class="row">
             <span class="name">{p.title}</span>
             <span>{p.kind}</span>

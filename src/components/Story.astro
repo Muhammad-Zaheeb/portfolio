@@ -81,7 +81,11 @@ const eh = projects[0];
     const watch = () => {
       spy?.disconnect();
       spy = new IntersectionObserver(
-        (entries) => entries.forEach((e) => e.isIntersecting && pick(Number((e.target as HTMLElement).dataset.chapter))),
+        (entries) => {
+          // While a chapter holds keyboard focus, it stays chosen even if the page scrolls to show it.
+          if (section.querySelector('[data-chapter]:focus-visible')) return;
+          entries.forEach((e) => e.isIntersecting && pick(Number((e.target as HTMLElement).dataset.chapter)));
+        },
         { rootMargin: phone.matches ? '-62% 0px -37% 0px' : '-49.5% 0px -49.5% 0px' },
       );
       chapters.forEach((c) => spy!.observe(c));
@@ -241,6 +245,8 @@ const eh = projects[0];
     }
     :global(.js) .chapter {
       min-height: 34svh;
+      /* Keeps a focused chapter clear of the pinned render. */
+      scroll-margin-top: calc(56.25vw + 64px);
     }
   }
   /* Too short to pin anything. */

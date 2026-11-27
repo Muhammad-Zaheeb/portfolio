@@ -19,6 +19,10 @@ if (!site && process.argv.includes('build')) {
 // https://astro.build/config
 export default defineConfig({
   site,
+  // The stylesheets are small, so they go inline and nothing blocks the first paint.
+  build: { inlineStylesheets: 'always' },
+  // The dev toolbar sits on top of the design during review.
+  devToolbar: { enabled: false },
   integrations: site ? [sitemap()] : [],
   vite: {
     plugins: [tailwindcss()],
